@@ -1,7 +1,6 @@
 ---
 title: "Drought in Texas"
-author: "YICHUN Lu"
-subtitle: Visualization and analysis of drought and causes
+author: "YICHUN LU"
 csl: apa.csl
 ---
 # Introduction
@@ -26,9 +25,8 @@ tx_1y <- read.csv('data/tx_1y.csv')
 # visualization the drought in 1 year
 # convert table and date formet 
 as.data.frame(tx_1y)
-tx_1y$ReleaseDate<-as.Date(as.character(tx_1y$ReleaseDate),format="%Y%m%d")
-
-ggplot(tx_1y, aes(ReleaseDate, tx_1y$D0))+geom_area()+ geom_area(aes(x = ReleaseDate,y=tx_1y$D1), fill='yellow') +geom_area(aes(x = ReleaseDate,y=tx_1y$D2),fill='orange')+geom_area(aes(x = ReleaseDate,y=tx_1y$D3),fill='red') + xlab("Date")+ylab("Percent Area%")
+tx_1y$ReleaseDate<-as.Date(as.character(tx_1y$ReleaseDate),format="%Y%m%d");
+ggplot(tx_1y, aes(ReleaseDate, tx_1y$D0))+geom_area()+ geom_area(aes(x = ReleaseDate,y=tx_1y$D1), fill='yellow') +geom_area(aes(x = ReleaseDate,y=tx_1y$D2),fill='orange')+geom_area(aes(x = ReleaseDate,y=tx_1y$D3),fill='red') + xlab("Date")+ylab("Percent Area%") 
 ```
 
 # Analysis of causes

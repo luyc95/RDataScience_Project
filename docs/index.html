@@ -9,10 +9,10 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="Your name here" />
+<meta name="author" content="YICHUN Lu" />
 
 
-<title>I have the best titles</title>
+<title>Drought in Texas</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -296,91 +296,108 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">I have the best titles</h1>
-<h3 class="subtitle"><em>Subtitle here if desired</em></h3>
-<h4 class="author"><em>Your name here</em></h4>
+<h1 class="title toc-ignore">Drought in Texas</h1>
+<h3 class="subtitle"><em>Visualization and analysis of drought and causes</em></h3>
+<h4 class="author"><em>YICHUN Lu</em></h4>
 
 </div>
 
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>My really awesome and complete introduction will go here.</p>
-<blockquote>
-<p>I know words. I have the best words. ~ Donald Trump</p>
-</blockquote>
+<p>Texas is no stranger to drought: the state has faced several droughts in recent decades, including the most recent and most severe drought that began in 2011. Texas has faced increasing demand for water to meet the needs of its rapidly growing population. Moreover, climate change has led to Texas experiencing an increase in drought events since 2011, which has intensified the for an impactful solution for state’s water situation. Texas is an enormous body of land, and it is difficult to conceptualize the degree of drought without a visual representation. In particular, spatial and temporal visualization can improve our knowledge on the intensity of the drought’s implication on the area throughout Texas. For visualization, the manner of the exploratory focus should be clearly investigated, where factors causing drought range from “Temperature” to “Precipitation” will be analyzed.Analysis on the relationships between factors, and the spread of the drought area will illuminate the various causes investigated.</p>
 </div>
-<div id="materials-and-methods" class="section level1">
-<h1>Materials and methods</h1>
-<p>Narrative and most code will go here. Describe what you are doing and show how to do it (with code).</p>
-<p>You can do bullets like this:</p>
-<ul>
-<li>The first most important thing</li>
-<li>The second most important thing</li>
-<li>The third most important thing</li>
-</ul>
-<p>You can do numbers like this:</p>
-<ol style="list-style-type: decimal">
-<li>The first most important thing</li>
-<li>The second most important thing</li>
-<li>The third most important thing</li>
-</ol>
-<p>See <a href="http://rmarkdown.rstudio.com/" class="uri">http://rmarkdown.rstudio.com/</a> for all the amazing things you can do.</p>
-<p>Here’s my first code chunk.</p>
-<pre class="r"><code>1+2</code></pre>
-<pre><code>## [1] 3</code></pre>
-<p>Load any required packages in a code chunk (you may need to install some packages):</p>
-<pre class="r"><code>library(dplyr)
-library(ggplot2)
-library(maps)
-library(spocc)
-knitr::opts_chunk$set(cache=TRUE)  # cache the results for quick compiling</code></pre>
-<p>We are going to use the <code>occ()</code> function to download <em>occurrence</em> records for the American robin (<em>Turdus migratorius</em>) from the <a href="gbif.org">Global Biodiversity Information Facility</a>.</p>
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/Turdus-migratorius-002.jpg" alt="alt text" width="200"> <small><small><small>Licensed under CC BY-SA 3.0 via <a href="https://commons.wikimedia.org/wiki/File:Turdus-migratorius-002.jpg#/media/File:Turdus-migratorius-002.jpg">Wikimedia Commons</a></small></small></small></p>
-<pre class="r"><code>## define which species to query
-sp=&#39;Turdus migratorius&#39;
-
-## run the query and convert to data.frame()
-d = occ(query=sp, from=&#39;ebird&#39;,limit = 100) %&gt;% occ2df()</code></pre>
-<p>This can take a few seconds.</p>
-<pre class="r"><code># Load coastline
-map=map_data(&quot;world&quot;)
-
-ggplot(d,aes(x=longitude,y=latitude))+
-  geom_polygon(aes(x=long,y=lat,group=group),data=map)+
-  geom_point(col=&quot;red&quot;)+
-  coord_equal()</code></pre>
-<div class="figure">
-<img src="index_files/figure-html/unnamed-chunk-4-1.png" alt="Map illustrating the known occurrence locations" width="576" />
-<p class="caption">
-Map illustrating the known occurrence locations
-</p>
+<div id="required-packages-and-data" class="section level1">
+<h1>Required packages and data</h1>
+<pre class="r"><code># packages installment
+install.packages(&quot;ggplot2&quot;,repos = &quot;http://cran.us.r-project.org&quot;)</code></pre>
+<pre><code>## 
+## The downloaded binary packages are in
+##  /var/folders/91/f5ydhxb13ybgmf_b72hhpdk80000gn/T//Rtmp2CGuvy/downloaded_packages</code></pre>
+<pre class="r"><code>library(ggplot2)
+knitr::opts_chunk$set(cache=TRUE)
+# data loading
+tx_1y &lt;- read.csv(&#39;data/tx_1y.csv&#39;)</code></pre>
 </div>
-</div>
-<div id="results" class="section level1">
-<h1>Results</h1>
-<p>Show tables, plots, etc. and describe them.</p>
-<pre class="r"><code>summary(d)</code></pre>
-<pre><code>## Warning in format.POSIXlt(as.POSIXlt(x), ...): unknown timezone &#39;default/
+<div id="visualization-of-drought" class="section level1">
+<h1>Visualization of drought</h1>
+<div id="drought-monitor-in-texas" class="section level2">
+<h2>Drought Monitor in Texas</h2>
+<pre class="r"><code># visualization the drought in 1 year
+# convert table and date formet 
+as.data.frame(tx_1y)</code></pre>
+<pre><code>##    ReleaseDate  None    D0    D1   D2   D3 D4
+## 1     20171031 71.18 26.30  2.41 0.11 0.00  0
+## 2     20171024 80.89 17.37  1.74 0.00 0.00  0
+## 3     20171017 80.83 14.85  4.32 0.00 0.00  0
+## 4     20171010 87.34  9.35  3.31 0.00 0.00  0
+## 5     20171003 86.76 11.04  2.20 0.00 0.00  0
+## 6     20170926 70.54 25.29  4.13 0.04 0.00  0
+## 7     20170919 79.27 17.46  2.92 0.35 0.00  0
+## 8     20170912 92.45  6.03  1.48 0.04 0.00  0
+## 9     20170905 94.84  4.36  0.75 0.04 0.00  0
+## 10    20170829 96.14  2.99  0.87 0.00 0.00  0
+## 11    20170822 86.44 11.09  2.47 0.00 0.00  0
+## 12    20170815 89.71  9.05  1.23 0.00 0.00  0
+## 13    20170808 79.97 15.74  4.29 0.00 0.00  0
+## 14    20170801 73.48 16.62  9.17 0.73 0.00  0
+## 15    20170725 75.04 15.96  7.73 1.26 0.00  0
+## 16    20170718 74.42 17.73  7.39 0.46 0.00  0
+## 17    20170711 76.12 17.31  6.57 0.00 0.00  0
+## 18    20170704 73.51 20.48  5.08 0.92 0.00  0
+## 19    20170627 76.48 17.54  5.37 0.61 0.00  0
+## 20    20170620 72.65 22.50  4.84 0.00 0.00  0
+## 21    20170613 78.23 19.31  2.47 0.00 0.00  0
+## 22    20170606 83.43 15.41  1.16 0.00 0.00  0
+## 23    20170530 65.50 30.80  3.70 0.00 0.00  0
+## 24    20170523 77.70 19.89  2.22 0.19 0.00  0
+## 25    20170516 65.58 28.27  4.95 1.20 0.00  0
+## 26    20170509 78.86 18.82  2.33 0.00 0.00  0
+## 27    20170502 91.38  7.18  1.44 0.00 0.00  0
+## 28    20170425 90.58  8.08  1.34 0.00 0.00  0
+## 29    20170418 90.30  8.16  1.54 0.00 0.00  0
+## 30    20170411 84.74 13.55  1.70 0.01 0.00  0
+## 31    20170404 82.49 14.59  2.91 0.01 0.00  0
+## 32    20170328 55.06 36.27  8.26 0.40 0.00  0
+## 33    20170321 53.46 37.91  7.70 0.93 0.00  0
+## 34    20170314 65.12 30.36  3.58 0.93 0.00  0
+## 35    20170307 70.92 24.43  3.72 0.93 0.00  0
+## 36    20170228 75.50 20.57  2.92 1.01 0.00  0
+## 37    20170221 91.57  6.36  1.25 0.82 0.00  0
+## 38    20170214 88.14  8.17  2.42 0.73 0.53  0
+## 39    20170207 90.56  6.04  2.19 1.03 0.19  0
+## 40    20170131 92.34  4.25  2.32 1.08 0.01  0
+## 41    20170124 92.24  4.57  2.11 1.08 0.01  0
+## 42    20170117 82.78 13.20  3.07 0.79 0.15  0
+## 43    20170110 74.87 19.10  5.15 0.75 0.14  0
+## 44    20170103 81.50 12.20  4.33 1.93 0.04  0
+## 45    20161227 75.85 17.18  5.19 1.74 0.04  0
+## 46    20161220 79.50 12.98  5.58 1.90 0.04  0
+## 47    20161213 80.86 11.78  5.42 1.90 0.04  0
+## 48    20161206 81.90 13.23  4.22 0.62 0.03  0
+## 49    20161129 66.37 19.44 10.92 3.19 0.08  0
+## 50    20161122 66.53 18.73  6.82 6.82 1.09  0
+## 51    20161115 64.98 18.70  8.63 7.06 0.63  0
+## 52    20161108 64.99 20.98  8.47 5.55 0.00  0
+## 53    20161101 59.55 25.58  8.37 6.50 0.00  0</code></pre>
+<pre class="r"><code>tx_1y$ReleaseDate&lt;-as.Date(as.character(tx_1y$ReleaseDate),format=&quot;%Y%m%d&quot;)</code></pre>
+<pre><code>## Warning in strptime(x, format, tz = &quot;GMT&quot;): unknown timezone &#39;default/
 ## America/New_York&#39;</code></pre>
-<pre><code>##      name             longitude         latitude         prov          
-##  Length:100         Min.   :-93.30   Min.   :32.86   Length:100        
-##  Class :character   1st Qu.:-82.73   1st Qu.:39.40   Class :character  
-##  Mode  :character   Median :-76.81   Median :40.78   Mode  :character  
-##                     Mean   :-78.43   Mean   :40.54                     
-##                     3rd Qu.:-74.73   3rd Qu.:42.47                     
-##                     Max.   :-69.20   Max.   :45.77                     
-##       date                key           
-##  Min.   :2017-10-18   Length:100        
-##  1st Qu.:2017-10-18   Class :character  
-##  Median :2017-10-18   Mode  :character  
-##  Mean   :2017-10-18                     
-##  3rd Qu.:2017-10-18                     
-##  Max.   :2017-10-18</code></pre>
+<pre class="r"><code>ggplot(tx_1y, aes(ReleaseDate, tx_1y$D0))+geom_area()+ geom_area(aes(x = ReleaseDate,y=tx_1y$D1), fill=&#39;yellow&#39;) +geom_area(aes(x = ReleaseDate,y=tx_1y$D2),fill=&#39;orange&#39;)+geom_area(aes(x = ReleaseDate,y=tx_1y$D3),fill=&#39;red&#39;) + xlab(&quot;Date&quot;)+ylab(&quot;Percent Area%&quot;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 </div>
-<div id="conclusions" class="section level1">
-<h1>Conclusions</h1>
-<p>What have you learned? Are there any broader implications?</p>
+</div>
+<div id="analysis-of-causes" class="section level1">
+<h1>Analysis of causes</h1>
+<div id="visualization-of-precipitation-and-temperature" class="section level2">
+<h2>Visualization of precipitation and temperature</h2>
+</div>
+<div id="relationship-analysis" class="section level2">
+<h2>Relationship analysis</h2>
+</div>
+</div>
+<div id="results-and-conclusions" class="section level1">
+<h1>Results and Conclusions</h1>
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>
