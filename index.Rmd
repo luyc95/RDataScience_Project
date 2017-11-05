@@ -20,7 +20,7 @@ tx_1y <- read.csv('data/tx_1y.csv')
 
 
 # Visualization of drought
-## Percent area of drought in Texas
+## Drought Percent area in Texas
 ```{r}
 # visualization the drought percent area in 1 year
 # convert table and date formet 
