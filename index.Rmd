@@ -20,13 +20,13 @@ tx_1y <- read.csv('data/tx_1y.csv')
 
 
 # Visualization of drought
-## Drought Monitor in Texas
+## Percent area of drought in Texas
 ```{r}
-# visualization the drought in 1 year
+# visualization the drought percent area in 1 year
 # convert table and date formet 
 as.data.frame(tx_1y)
 tx_1y$ReleaseDate<-as.Date(as.character(tx_1y$ReleaseDate),format="%Y%m%d");
-ggplot(tx_1y, aes(ReleaseDate, tx_1y$D0))+geom_area()+ geom_area(aes(x = ReleaseDate,y=tx_1y$D1), fill='yellow') +geom_area(aes(x = ReleaseDate,y=tx_1y$D2),fill='orange')+geom_area(aes(x = ReleaseDate,y=tx_1y$D3),fill='red') + xlab("Date")+ylab("Percent Area%") 
+ggplot(tx_1y, aes(ReleaseDate, tx_1y$D0))+geom_area()+ geom_area(aes(x = ReleaseDate,y=tx_1y$D1), fill='yellow') +geom_area(aes(x = ReleaseDate,y=tx_1y$D2),fill='orange')+geom_area(aes(x = ReleaseDate,y=tx_1y$D3),fill='red') + xlab("Date")+ylab("Percent Area") 
 ```
 
 # Analysis of causes
