@@ -9,7 +9,7 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="YICHUN Lu" />
+<meta name="author" content="YICHUN LU" />
 
 
 <title>Drought in Texas</title>
@@ -26,6 +26,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-1.1/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -297,15 +299,16 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Drought in Texas</h1>
-<h3 class="subtitle"><em>Visualization and analysis of drought and causes</em></h3>
-<h4 class="author"><em>YICHUN Lu</em></h4>
+<h4 class="author"><em>YICHUN LU</em></h4>
 
 </div>
 
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>Texas is no stranger to drought: the state has faced several droughts in recent decades, including the most recent and most severe drought that began in 2011. Texas has faced increasing demand for water to meet the needs of its rapidly growing population. Moreover, climate change has led to Texas experiencing an increase in drought events since 2011, which has intensified the for an impactful solution for state’s water situation. Texas is an enormous body of land, and it is difficult to conceptualize the degree of drought without a visual representation. In particular, spatial and temporal visualization can improve our knowledge on the intensity of the drought’s implication on the area throughout Texas. For visualization, the manner of the exploratory focus should be clearly investigated, where factors causing drought range from “Temperature” to “Precipitation” will be analyzed.Analysis on the relationships between factors, and the spread of the drought area will illuminate the various causes investigated.</p>
+<p>Texas is no stranger to drought: the state has faced several droughts in recent decades, including the most recent and most severe drought that began in 2011. Texas has faced increasing demand for water to meet the needs of its rapidly growing population. Moreover, climate change has led to Texas experiencing an increase in drought events since 2011, which has intensified the for an impactful solution for state’s water situation.</p>
+<p>Texas is an enormous body of land, and it is difficult to conceptualize the degree of drought without a visual representation. In particular, spatial and temporal visualization can improve our knowledge on the intensity of the drought’s implication on the area throughout Texas. For visualization, the manner of the exploratory focus should be clearly investigated, where factors causing drought range from “Temperature” to “Precipitation” will be analyzed.</p>
+<p>Analysis on the relationships between factors of drought, and the spread of the drought area, will be investigated.</p>
 </div>
 <div id="required-packages-and-data" class="section level1">
 <h1>Required packages and data</h1>
@@ -313,7 +316,7 @@ div.tocify {
 install.packages(&quot;ggplot2&quot;,repos = &quot;http://cran.us.r-project.org&quot;)</code></pre>
 <pre><code>## 
 ## The downloaded binary packages are in
-##  /var/folders/91/f5ydhxb13ybgmf_b72hhpdk80000gn/T//Rtmp2CGuvy/downloaded_packages</code></pre>
+##  /var/folders/91/f5ydhxb13ybgmf_b72hhpdk80000gn/T//RtmpnPmvMU/downloaded_packages</code></pre>
 <pre class="r"><code>library(ggplot2)
 knitr::opts_chunk$set(cache=TRUE)
 # data loading
@@ -321,9 +324,9 @@ tx_1y &lt;- read.csv(&#39;data/tx_1y.csv&#39;)</code></pre>
 </div>
 <div id="visualization-of-drought" class="section level1">
 <h1>Visualization of drought</h1>
-<div id="drought-monitor-in-texas" class="section level2">
-<h2>Drought Monitor in Texas</h2>
-<pre class="r"><code># visualization the drought in 1 year
+<div id="drought-percent-area-in-texas" class="section level2">
+<h2>Drought Percent area in Texas</h2>
+<pre class="r"><code># visualization the drought percent area in 1 year
 # convert table and date formet 
 as.data.frame(tx_1y)</code></pre>
 <pre><code>##    ReleaseDate  None    D0    D1   D2   D3 D4
@@ -380,11 +383,11 @@ as.data.frame(tx_1y)</code></pre>
 ## 51    20161115 64.98 18.70  8.63 7.06 0.63  0
 ## 52    20161108 64.99 20.98  8.47 5.55 0.00  0
 ## 53    20161101 59.55 25.58  8.37 6.50 0.00  0</code></pre>
-<pre class="r"><code>tx_1y$ReleaseDate&lt;-as.Date(as.character(tx_1y$ReleaseDate),format=&quot;%Y%m%d&quot;)</code></pre>
+<pre class="r"><code>tx_1y$ReleaseDate&lt;-as.Date(as.character(tx_1y$ReleaseDate),format=&quot;%Y%m%d&quot;);</code></pre>
 <pre><code>## Warning in strptime(x, format, tz = &quot;GMT&quot;): unknown timezone &#39;default/
 ## America/New_York&#39;</code></pre>
-<pre class="r"><code>ggplot(tx_1y, aes(ReleaseDate, tx_1y$D0))+geom_area()+ geom_area(aes(x = ReleaseDate,y=tx_1y$D1), fill=&#39;yellow&#39;) +geom_area(aes(x = ReleaseDate,y=tx_1y$D2),fill=&#39;orange&#39;)+geom_area(aes(x = ReleaseDate,y=tx_1y$D3),fill=&#39;red&#39;) + xlab(&quot;Date&quot;)+ylab(&quot;Percent Area%&quot;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(tx_1y, aes(ReleaseDate, tx_1y$D0))+geom_area()+ geom_area(aes(x = ReleaseDate,y=tx_1y$D1), fill=&#39;yellow&#39;) +geom_area(aes(x = ReleaseDate,y=tx_1y$D2),fill=&#39;orange&#39;)+geom_area(aes(x = ReleaseDate,y=tx_1y$D3),fill=&#39;red&#39;) + xlab(&quot;Date&quot;)+ylab(&quot;Percent Area&quot;) </code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" /> The output graph should be shown as below:</p>
 </div>
 </div>
 <div id="analysis-of-causes" class="section level1">

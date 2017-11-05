@@ -1,10 +1,17 @@
 ---
 title: "Drought in Texas"
 author: "YICHUN LU"
+output:
+  html_document:
+    df_print: paged
 csl: apa.csl
 ---
 # Introduction
-Texas is no stranger to drought: the state has faced several droughts in recent decades, including the most recent and most severe drought that began in 2011. Texas has faced increasing demand for water to meet the needs of its rapidly growing population. Moreover, climate change has led to Texas experiencing an increase in drought events since 2011, which has intensified the for an impactful solution for state’s water situation. Texas is an enormous body of land, and it is difficult to conceptualize the degree of drought without a visual representation. In particular, spatial and temporal visualization can improve our knowledge on the intensity of the drought’s implication on the area throughout Texas. For visualization, the manner of the exploratory focus should be clearly investigated, where factors causing drought range from “Temperature” to “Precipitation” will be analyzed.Analysis on the relationships between factors, and the spread of the drought area will illuminate the various causes investigated.
+Texas is no stranger to drought: the state has faced several droughts in recent decades, including the most recent and most severe drought that began in 2011. Texas has faced increasing demand for water to meet the needs of its rapidly growing population. Moreover, climate change has led to Texas experiencing an increase in drought events since 2011, which has intensified the for an impactful solution for state’s water situation. 
+
+Texas is an enormous body of land, and it is difficult to conceptualize the degree of drought without a visual representation. In particular, spatial and temporal visualization can improve our knowledge on the intensity of the drought’s implication on the area throughout Texas. For visualization, the manner of the exploratory focus should be clearly investigated, where factors causing drought range from “Temperature” to “Precipitation” will be analyzed.
+
+Analysis on the relationships between factors of drought, and the spread of the drought area, will be investigated.
 
 
 # Required packages and data 
@@ -28,6 +35,7 @@ as.data.frame(tx_1y)
 tx_1y$ReleaseDate<-as.Date(as.character(tx_1y$ReleaseDate),format="%Y%m%d");
 ggplot(tx_1y, aes(ReleaseDate, tx_1y$D0))+geom_area()+ geom_area(aes(x = ReleaseDate,y=tx_1y$D1), fill='yellow') +geom_area(aes(x = ReleaseDate,y=tx_1y$D2),fill='orange')+geom_area(aes(x = ReleaseDate,y=tx_1y$D3),fill='red') + xlab("Date")+ylab("Percent Area") 
 ```
+The output graph should be shown as below:
 
 # Analysis of causes
 ## Visualization of precipitation and temperature
