@@ -26,8 +26,6 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-1.1/highlight.js"></script>
-<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
-<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -313,14 +311,44 @@ div.tocify {
 <div id="required-packages-and-data" class="section level1">
 <h1>Required packages and data</h1>
 <pre class="r"><code># packages installment
-install.packages(&quot;ggplot2&quot;,repos = &quot;http://cran.us.r-project.org&quot;)</code></pre>
+# install.packages(&quot;ggplot2&quot;,repos = &quot;http://cran.us.r-project.org&quot;)
+# install.packages(&quot;gridExtra&quot;,repos = &quot;http://cran.us.r-project.org&quot;)
+library(rmarkdown)
+library(gridExtra)
+library(ggplot2)
+library(rgdal)</code></pre>
+<pre><code>## Loading required package: sp</code></pre>
+<pre><code>## rgdal: version: 1.2-10, (SVN revision 673)
+##  Geospatial Data Abstraction Library extensions to R successfully loaded
+##  Loaded GDAL runtime: GDAL 2.1.3, released 2017/20/01
+##  Path to GDAL shared files: /Library/Frameworks/R.framework/Versions/3.4/Resources/library/rgdal/gdal
+##  Loaded PROJ.4 runtime: Rel. 4.9.3, 15 August 2016, [PJ_VERSION: 493]
+##  Path to PROJ.4 shared files: /Library/Frameworks/R.framework/Versions/3.4/Resources/library/rgdal/proj
+##  Linking to sp version: 1.2-5</code></pre>
+<pre class="r"><code>library(dplyr)</code></pre>
 <pre><code>## 
-## The downloaded binary packages are in
-##  /var/folders/91/f5ydhxb13ybgmf_b72hhpdk80000gn/T//RtmpnPmvMU/downloaded_packages</code></pre>
-<pre class="r"><code>library(ggplot2)
-knitr::opts_chunk$set(cache=TRUE)
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:gridExtra&#39;:
+## 
+##     combine</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>knitr::opts_chunk$set(cache=TRUE)
 # data loading
-tx_1y &lt;- read.csv(&#39;data/tx_1y.csv&#39;)</code></pre>
+tx_1y &lt;- read.csv(&#39;data/tx_1y.csv&#39;)
+tx_1031 &lt;- read.csv(&#39;data/tx_1031.csv&#39;)
+tx &lt;- as.data.frame(tx_1031)
+shp &lt;- readOGR(dsn=path.expand(&quot;data/bnd_tx/txdot-counties/txdot-2015-county-generalized_tx.shp&quot;))</code></pre>
+<pre><code>## OGR data source with driver: ESRI Shapefile 
+## Source: &quot;data/bnd_tx/txdot-counties/txdot-2015-county-generalized_tx.shp&quot;, layer: &quot;txdot-2015-county-generalized_tx&quot;
+## with 254 features
+## It has 8 fields</code></pre>
+<pre class="r"><code>shp@data = data.frame(shp@data, tx[match(shp@data[[&quot;FIPS&quot;]], tx$FIPS),])
+knitr::opts_chunk$set(cache=TRUE)</code></pre>
 </div>
 <div id="visualization-of-drought" class="section level1">
 <h1>Visualization of drought</h1>
@@ -384,10 +412,19 @@ as.data.frame(tx_1y)</code></pre>
 ## 52    20161108 64.99 20.98  8.47 5.55 0.00  0
 ## 53    20161101 59.55 25.58  8.37 6.50 0.00  0</code></pre>
 <pre class="r"><code>tx_1y$ReleaseDate&lt;-as.Date(as.character(tx_1y$ReleaseDate),format=&quot;%Y%m%d&quot;);</code></pre>
-<pre><code>## Warning in strptime(x, format, tz = &quot;GMT&quot;): unknown timezone &#39;default/
-## America/New_York&#39;</code></pre>
+<pre><code>## Warning in strptime(x, format, tz = &quot;GMT&quot;): unknown timezone &#39;zone/tz/
+## 2017c.1.0/zoneinfo/America/New_York&#39;</code></pre>
 <pre class="r"><code>ggplot(tx_1y, aes(ReleaseDate, tx_1y$D0))+geom_area()+ geom_area(aes(x = ReleaseDate,y=tx_1y$D1), fill=&#39;yellow&#39;) +geom_area(aes(x = ReleaseDate,y=tx_1y$D2),fill=&#39;orange&#39;)+geom_area(aes(x = ReleaseDate,y=tx_1y$D3),fill=&#39;red&#39;) + xlab(&quot;Date&quot;)+ylab(&quot;Percent Area&quot;) </code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" /> The output graph should be shown as below:</p>
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code># visualization the drought area with different drought degree
+# visualization the drought area in D1 degree_ moderate drought
+shp2 &lt;- fortify(shp)</code></pre>
+<pre><code>## Regions defined for each Polygons</code></pre>
+<pre class="r"><code>shp$id &lt;- row.names(shp)
+shp2 &lt;- left_join(shp2,shp@data,by=&quot;id&quot;)
+ggplot &lt;- ggplot(data = shp2,aes(x=long,y=lat,group=group,fill=D1))+geom_polygon() + coord_map() + scale_fill_gradient(low = &#39;white&#39;,high = &#39;red&#39;)
+ggplot</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 </div>
 </div>
 <div id="analysis-of-causes" class="section level1">

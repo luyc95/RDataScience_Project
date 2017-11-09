@@ -1,9 +1,6 @@
 ---
 title: "Drought in Texas"
 author: "YICHUN LU"
-output:
-  html_document:
-    df_print: paged
 csl: apa.csl
 ---
 # Introduction
@@ -17,11 +14,21 @@ Analysis on the relationships between factors of drought, and the spread of the 
 # Required packages and data 
 ```{r}
 # packages installment
-install.packages("ggplot2",repos = "http://cran.us.r-project.org")
+# install.packages("ggplot2",repos = "http://cran.us.r-project.org")
+# install.packages("gridExtra",repos = "http://cran.us.r-project.org")
+library(rmarkdown)
+library(gridExtra)
 library(ggplot2)
+library(rgdal)
+library(dplyr)
 knitr::opts_chunk$set(cache=TRUE)
 # data loading
 tx_1y <- read.csv('data/tx_1y.csv')
+tx_1031 <- read.csv('data/tx_1031.csv')
+tx <- as.data.frame(tx_1031)
+shp <- readOGR(dsn=path.expand("data/bnd_tx/txdot-counties/txdot-2015-county-generalized_tx.shp"))
+shp@data = data.frame(shp@data, tx[match(shp@data[["FIPS"]], tx$FIPS),])
+knitr::opts_chunk$set(cache=TRUE)
 ```
 
 
@@ -35,7 +42,17 @@ as.data.frame(tx_1y)
 tx_1y$ReleaseDate<-as.Date(as.character(tx_1y$ReleaseDate),format="%Y%m%d");
 ggplot(tx_1y, aes(ReleaseDate, tx_1y$D0))+geom_area()+ geom_area(aes(x = ReleaseDate,y=tx_1y$D1), fill='yellow') +geom_area(aes(x = ReleaseDate,y=tx_1y$D2),fill='orange')+geom_area(aes(x = ReleaseDate,y=tx_1y$D3),fill='red') + xlab("Date")+ylab("Percent Area") 
 ```
-The output graph should be shown as below:
+
+```{r}
+# visualization the drought area with different drought degree
+# visualization the drought area in D1 degree_ moderate drought
+shp2 <- fortify(shp)
+shp$id <- row.names(shp)
+shp2 <- left_join(shp2,shp@data,by="id")
+ggplot <- ggplot(data = shp2,aes(x=long,y=lat,group=group,fill=D1))+geom_polygon() + coord_map() + scale_fill_gradient(low = 'white',high = 'red')
+ggplot
+
+```
 
 # Analysis of causes
 ## Visualization of precipitation and temperature
