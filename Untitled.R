@@ -1,0 +1,8 @@
+library(rnoaa)
+sta <- ghcnd_stations()
+TX_sta <- filter(sta,state=='TX')
+TX_sta_t <- filter(TX_sta,element=='TMIN'|element=='TMAX')
+id <- unique(TX_sta_t$id)
+tx_data <- meteo_pull_monitors(id , var = "TAVG")
+tx_data_1 <- meteo_pull_monitors(id , var = "TMAX")
+tx_data_2 <- meteo_pull_monitors(id , var = "TMIN")

@@ -1,7 +1,8 @@
 output_dir: 'docs'
 output:
   html_document:
-    theme: simplex  # choose your theme here: https://bootswatch.com/
+    code_folding: show
+    theme: united  # choose your theme here: https://bootswatch.com/
     highlight: textmate
     mathjax: null
     toc: true
