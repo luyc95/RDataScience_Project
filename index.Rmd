@@ -1,7 +1,10 @@
 ---
 title: "Drought in Texas"
 author: "YICHUN LU"
-csl: apa.csl
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
 ---
 # Introduction
 Texas is no stranger to drought: the state has faced several droughts in recent decades, including the most recent and most severe drought that began in 2011. Texas has faced increasing demand for water to meet the needs of its rapidly growing population. Moreover, climate change has led to Texas experiencing an increase in drought events since 2011, which has intensified the for an impactful solution for state’s water situation. 
@@ -11,9 +14,10 @@ Texas is an enormous body of land, and it is difficult to conceptualize the degr
 Analysis on the relationships between factors of drought, and the spread of the drought area, will be investigated.
 
 
-## Required packages and data 
+# Required packages and data
 
-```{r package loading, message=FALSE, warning=FALSE, results='hide'}
+Please install and load the required packages first.
+```{r package loading, echo=FALSE}
 # packages installment
 library(rmarkdown)
 library(gridExtra)
@@ -31,47 +35,30 @@ library(zoo)
 knitr::opts_chunk$set(cache=TRUE)
 ```
 
-```{r data loading, message=FALSE, warning=FALSE, results='hide'}
-# data1 us monitor data loading
-tx_1y <- read.csv('data/tx_1y.csv')
-tx_1y_1 <- read.csv('data/tx_1y.csv')
-tx_1031 <- read.csv('data/tx_1031.csv')
-tx <- as.data.frame(tx_1031)
+The boundary shapefile of Texas is one of TIGER products which is downloaded from Census Bureau's MAF/TIGER database.
 
-# data2 temp$precip data loading
-min_mean <- read.csv('data/minmean.csv')
-max_mean <- read.csv('data/maxmean.csv')
-precip <- read.csv('data/precip.csv')
-drought <- read.csv('data/drought.csv')
-total <- read.csv('data/total.csv')
-
+```{r shpefile loads,echo=FALSE}
 # load texas shp file
 shp <- readOGR(dsn=path.expand("data/bnd_tx/txdot-counties/txdot-2015-county-generalized_tx.shp"))
-shp@data = data.frame(shp@data, tx[match(shp@data[["FIPS"]], tx$FIPS),])
-
 knitr::opts_chunk$set(cache=TRUE)
 ```
 
+In this project, I used drought severity classification data downloaded from United States Drought Monitor (The National Drought Mitigation Center,2017). It is a weekly map that the data is calculated based on measurements of climatic, hydrologic and soil conditions as well as reported impacts and observations from contributors around the country. The time series data ranged from Janaury 5 2010 to November 28 2017.
 
-
-# Visualization of drought distribution
-## Drought Percent area in Texas
-```{r one-year percent area,results='hide'}
-# visualization the drought percent area in 1 year
-# convert table and date formet 
-as.data.frame(tx_1y)
-tx_1y$ReleaseDate <- as.Date(as.character(tx_1y$ReleaseDate),format="%Y%m%d");
-
-# datatable visualization
-datatable(tx_1y_1,style = 'default',options = list(pageLength = 10))
+```{r us drought monitor data loading, message=FALSE, warning=FALSE}
+# data1 us monitor data loading
+tx_7y <- read.csv('data/tx_7y.csv')
+tx_7y_1 <- read.csv('data/tx_7y.csv')
+tx_1031 <- read.csv('data/tx_1031.csv')
+tx <- as.data.frame(tx_1031)
+shp@data = data.frame(shp@data, tx_1031[match(shp@data[["FIPS"]], tx_1031$FIPS),])
+# show the data table
+datatable(tx_7y_1,style = 'default',options = list(pageLength = 5))
 ```
 
-```{r chart_show}
-# chart of one-year drought percent area
-ggplot(tx_1y, aes(ReleaseDate, tx_1y$D0)) + geom_area() + geom_area(aes(x = ReleaseDate, y=tx_1y$D1), fill='yellow') + geom_area(aes(x = ReleaseDate, y=tx_1y$D2), fill='orange') + geom_area(aes(x = ReleaseDate, y=tx_1y$D3), fill='red') + xlab("Date") + ylab("Percent Area") 
-```
+Unluckily, the index for each county by state can be downloaded just in single day, therefore, I choosed the data in October 31 as my sample. This is an interactive map which shows the drought spatial distribution in October 31.
 
-```{r leaflet_drought percent}
+```{r interactive map of spatial distribution}
 # Transform spatial polygon data frame 
 shp_loglat <- spTransform(shp,CRS("+proj=longlat +datum=WGS84"))
 
@@ -116,25 +103,80 @@ leaflet(shp@bbox) %>%
               fillOpacity = 1)%>%
   addMiniMap()%>%
   frameWidget(height = 500)
-
 ```
 
+Addtionally, I used the data downloaded from US Climate Division Dataset, including temperature, precipitation and Palmer Drought Severity Index from 2000 to October 2017.
 
+```{r}
+# data2 temp$precip data loading
+min_mean <- read.csv('data/minmean.csv')
+max_mean <- read.csv('data/maxmean.csv')
+precip <- read.csv('data/precip.csv')
+drought <- read.csv('data/drought.csv')
+total <- read.csv('data/total.csv')
 
-# Analysis of causes
-## Visualization of relation between precipitation and temperature
-```{r data surfing}
-total$min <- fahrenheit.to.celsius(total$min,2)
-total$max <- fahrenheit.to.celsius(total$max,2)
+# Temperature format transfromation
+total$mean.temp <- fahrenheit.to.celsius(total$mean.temp,2)
+
+# inch to cm
+total$precip <- total$precip*2.54
+
+# show the data table
 datatable(data = total,
           options = list(pageLength = 12),
-          colnames = c('Month', 'Minimum Temperature', 'Maximum Temperature', 'Precipitation', 'Palmer Drought Index'))
+          colnames = c('Month', 'Mean Temperature (C)', 'Precipitation (cm)', 'Palmer Drought Index'))
+
 ```
+
+# Results
+
+## Visualization of drought 
+
+### Drought Percent area in Texas from 2010 to 2017
+```{r one-year percent area}
+# convert table and date formet 
+as.data.frame(tx_7y)
+tx_7y$ReleaseDate <- as.Date(as.character(tx_7y$ReleaseDate),format="%Y%m%d");
+
+# chart of one-year drought percent area
+ggplot(tx_7y, aes(ReleaseDate, tx_7y$D0)) + geom_area() + geom_area(aes(x = ReleaseDate, y=tx_7y$D1), fill='yellow') + geom_area(aes(x = ReleaseDate, y=tx_7y$D2), fill='orange') + geom_area(aes(x = ReleaseDate, y=tx_7y$D3), fill='red') + xlab("Date") + ylab("Percent Area") 
+```
+
+### Sptial distribution of drought in Texas in October 31 2017
+```{r visualization the drought area with different drought degree}
+# visualization the drought area in D1 degree_ moderate drought
+shp2 <- fortify(shp)
+shp$id <- row.names(shp)
+shp2 <- left_join(shp2,shp@data,by="id")
+g0 <- ggplot(data = shp2,
+                  aes(x=long,y=lat,group=group,fill=D0))+ geom_polygon() + coord_map() + scale_fill_gradient(low = 'white',high = 'red')
+
+ggplot0<- g0+ theme(legend.position = "right") + theme(axis.ticks = element_blank(), axis.text = element_blank())
+
+# visualization the drought area in D2 degree_ severe drought
+g1 <- ggplot(data = shp2,
+                  aes(x=long,y=lat,group=group,fill=D1)) + geom_polygon() + coord_map() + scale_fill_gradient(low = 'white',high = 'red')
+
+ggplot1 <- g1+ theme(legend.position = "right")+ theme(axis.ticks = element_blank(), axis.text = element_blank())
+
+# visualization the drought area in D3 Extreme_ severe drought
+g2 <- ggplot(data = shp2,
+                  aes(x=long,y=lat,group=group,fill=D2))+ geom_polygon() + coord_map() + scale_fill_gradient(low = 'white',high = 'red')
+
+ggplot2 <- g2+ theme(legend.position = "right")+ theme(axis.ticks = element_blank(), axis.text = element_blank())
+
+# build the three graph in one page
+grid.arrange(ggplot0,ggplot1,ggplot2,ncol=1)  
+```
+
+# Analysis of causes
+## Visualization of precipitation and temperature
 
 ```{r }
 # Convert date column into date format and convert the table into xts format
+total[,c("temp_10")] <- total$mean.temp/10
 total$X <- as.Date(as.yearmon(total$X))
-time <- xts(total[, c(-1,-5)], order.by=total$X)
+time <- xts(total[, c(2,3)], order.by=total$X)
 # Use dygraph to chart
 dygraph(data = time,
         main = "Temperature and precipitation from 2000 to 2017 in Texas",
@@ -143,44 +185,19 @@ dygraph(data = time,
   dyOptions(stackedGraph = TRUE) %>%
   frameWidget(height =500)
 ```
+
 ## Relationship analysis 
 ```{r temp & drought}
-ggplot(total,aes(y=Palmer.Drought.Index.Mean,x=total$max))+
-  geom_point()+
-  geom_abline(intercept=0, slope=1)
+
+total%>%
+  ggplot(aes(x=X))+
+    geom_line(aes(y=Palmer.Drought.Index.Mean),col="grey")+
+  geom_line(aes(y=total$precip),col="blue")+
+  geom_line(aes(y=mean.temp),col="red")
+    
 ```
 
-```{r preciptation $ drought}
-```
 
-
-# Results and Conclusions
-
-```{r visualization the drought area with different drought degree,results='hold'}
-# visualization the drought area in D1 degree_ moderate drought
-shp2 <- fortify(shp)
-shp$id <- row.names(shp)
-shp2 <- left_join(shp2,shp@data,by="id")
-g0 <- ggplot(data = shp2,
-                  aes(x=long,y=lat,group=group,fill=D1))+ geom_polygon() + coord_map() + scale_fill_gradient(low = 'white',high = 'red')
-
-ggplot0<- g0+ theme(legend.position = "right") + theme(axis.ticks = element_blank(), axis.text = element_blank())
-
-# visualization the drought area in D2 degree_ severe drought
-g1 <- ggplot(data = shp2,
-                  aes(x=long,y=lat,group=group,fill=D2)) + geom_polygon() + coord_map() + scale_fill_gradient(low = 'white',high = 'red')
-
-ggplot1 <- g1+ theme(legend.position = "right")+ theme(axis.ticks = element_blank(), axis.text = element_blank())
-
-# visualization the drought area in D3 Extreme_ severe drought
-g2 <- ggplot(data = shp2,
-                  aes(x=long,y=lat,group=group,fill=D3))+ geom_polygon() + coord_map() + scale_fill_gradient(low = 'white',high = 'red')
-
-ggplot2 <- g2+ theme(legend.position = "right")+ theme(axis.ticks = element_blank(), axis.text = element_blank())
-
-# build the three graph in one page
-grid.arrange(ggplot0,ggplot1,ggplot2,nrow=1)  
-```
-
+# Conclusions
 # References
 
