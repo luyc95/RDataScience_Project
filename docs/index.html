@@ -512,8 +512,8 @@ dygraph(data = time,
   dyRangeSelector(dateWindow = c(&quot;2000-01-01&quot;, &quot;2017-10-01&quot;))%&gt;%
   dyOptions(stackedGraph = TRUE) %&gt;%
   frameWidget(height =500)</code></pre>
-<p><div id="htmlwidget-b26a517c446f699ab146" style="width:100%;height:500px;" class="widgetframe html-widget"></div>
-<script type="application/json" data-for="htmlwidget-b26a517c446f699ab146">{"x":{"url":"index_files/figure-html//widgets/widget_interactive data window.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script> Compared with temperature changing line, precipitation’s trend line fluctuates more dramatically, so that the long term precipitation condition is not very stable. Hence, it is more likely to be dry without steady raining.</p>
+<p><div id="htmlwidget-be17da6760bc2b9c8896" style="width:100%;height:500px;" class="widgetframe html-widget"></div>
+<script type="application/json" data-for="htmlwidget-be17da6760bc2b9c8896">{"x":{"url":"index_files/figure-html//widgets/widget_interactive data window.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script> Compared with temperature changing line, precipitation’s trend line fluctuates more dramatically, so that the long term precipitation condition is not very stable. Hence, it is more likely to be dry without steady raining.</p>
 </div>
 </div>
 <div id="relationship-analysis" class="section level2">
@@ -524,8 +524,6 @@ dygraph(data = time,
   geom_line(aes(y=total$precip,col=&quot;blue&quot;))+
   geom_line(aes(y=mean.temp,col=&quot;red&quot;))+
    scale_color_discrete(name = &quot;Legend&quot;, labels = c(&quot;Precipitation&quot;, &quot;PDSI&quot;,&quot;Temperature&quot;))</code></pre>
-<pre><code>## Warning in as.POSIXlt.POSIXct(x): unknown timezone &#39;zone/tz/2017c.1.0/
-## zoneinfo/America/New_York&#39;</code></pre>
 <p><img src="index_files/figure-html/temp%20&%20drought-1.png" width="672" /></p>
 <p>While observing the line graph, we can find that, Texas suffered severe drought during 2011 to 2015. In this period, temperature did not change acutely but precipitation was less than average values in other years. As such, we can guess that less precipitation may be the cause of drought since 2011. With stable temperature and less precipitation, there was few rainfall in this term, in other words, it would be more likely to be dry.</p>
 </div>
