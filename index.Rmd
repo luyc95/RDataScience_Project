@@ -261,7 +261,7 @@ total%>%
     geom_line(aes(y=Palmer.Drought.Index.Mean,col="grey"))+
   geom_line(aes(y=total$precip,col="blue"))+
   geom_line(aes(y=mean.temp,col="red"))+
-   scale_color_discrete(name = "Legend", labels = c("Precipitation", "PDSI","Temperature"))
+   scale_color_discrete(name = "Legend", labels = c("Precipitation", "PDSI","Temperature")) + xlab("Year")
     
 ```
 

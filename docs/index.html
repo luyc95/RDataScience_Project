@@ -529,7 +529,7 @@ dygraph(data = time,
     geom_line(aes(y=Palmer.Drought.Index.Mean,col=&quot;grey&quot;))+
   geom_line(aes(y=total$precip,col=&quot;blue&quot;))+
   geom_line(aes(y=mean.temp,col=&quot;red&quot;))+
-   scale_color_discrete(name = &quot;Legend&quot;, labels = c(&quot;Precipitation&quot;, &quot;PDSI&quot;,&quot;Temperature&quot;))</code></pre>
+   scale_color_discrete(name = &quot;Legend&quot;, labels = c(&quot;Precipitation&quot;, &quot;PDSI&quot;,&quot;Temperature&quot;)) + xlab(&quot;Year&quot;)</code></pre>
 <p><img src="index_files/figure-html/temp%20&%20drought-1.png" width="672" /></p>
 <p>While observing the line graph, we can find that, Texas suffered severe drought during 2011 to 2015. In this period, temperature did not change acutely but precipitation was less than average values in other years. As such, we can guess that less precipitation may be the cause of drought since 2011. With stable temperature and less precipitation, there was few rainfall in this term, in other words, it would be more likely to be dry.</p>
 </div>
