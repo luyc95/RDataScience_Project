@@ -252,7 +252,7 @@ dygraph(data = time,
 Compared with temperature changing line, precipitation's trend line fluctuates more dramatically, so that the long term precipitation condition is not very stable. Hence, it is more likely to be dry without steady raining.
 
 
-## Relationship analysis 
+### Relationship analysis 
 
 ```{r temp & drought,message=FALSE,warning=FALSE}
 total%>%

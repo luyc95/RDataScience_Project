@@ -522,9 +522,8 @@ dygraph(data = time,
 <script type="application/json" data-for="htmlwidget-be17da6760bc2b9c8896">{"x":{"url":"index_files/figure-html//widgets/widget_interactive data window.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
 <p>Compared with temperature changing line, precipitation’s trend line fluctuates more dramatically, so that the long term precipitation condition is not very stable. Hence, it is more likely to be dry without steady raining.</p>
 </div>
-</div>
-<div id="relationship-analysis" class="section level2">
-<h2>Relationship analysis</h2>
+<div id="relationship-analysis" class="section level3">
+<h3>Relationship analysis</h3>
 <pre class="r"><code>total%&gt;%
   ggplot(aes(x=X))+
     geom_line(aes(y=Palmer.Drought.Index.Mean,col=&quot;grey&quot;))+
@@ -533,6 +532,7 @@ dygraph(data = time,
    scale_color_discrete(name = &quot;Legend&quot;, labels = c(&quot;Precipitation&quot;, &quot;PDSI&quot;,&quot;Temperature&quot;))</code></pre>
 <p><img src="index_files/figure-html/temp%20&%20drought-1.png" width="672" /></p>
 <p>While observing the line graph, we can find that, Texas suffered severe drought during 2011 to 2015. In this period, temperature did not change acutely but precipitation was less than average values in other years. As such, we can guess that less precipitation may be the cause of drought since 2011. With stable temperature and less precipitation, there was few rainfall in this term, in other words, it would be more likely to be dry.</p>
+</div>
 </div>
 </div>
 <div id="conclusion" class="section level1">
