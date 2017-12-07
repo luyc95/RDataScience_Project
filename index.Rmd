@@ -1,22 +1,19 @@
 ---
 title: "Drought in Texas"
 author: "YICHUN LU"
-output:
-  pdf_document: default
-  html_document:
-    df_print: paged
 ---
-# Introduction
-Texas is no stranger to drought: the state has faced several droughts in recent decades, including the most recent and most severe drought that began in 2011. Texas has faced increasing demand for water to meet the needs of its rapidly growing population. Moreover, climate change has led to Texas experiencing an increase in drought events since 2011, which has intensified the for an impactful solution for state’s water situation. 
 
-Texas is the second-largest state in the United States and the total area is 696,241 square kilometers so that it is difficult to conceptualize the degree of drought without a visual representation. In particular, spatial and temporal visualization can improve our knowledge on the intensity of the drought’s implication on the area throughout Texas. For visualization, the manner of the exploratory focus should be clearly investigated, where factors causing drought range from “Temperature” to “Precipitation” will be analyzed.
+# Introduction
+Texas is no stranger to drought: the state has faced several droughts in recent decades, including the most recent and most severe drought that began in 2011.Texas has faced increasing demand for water to meet the needs of its rapidly growing population. Moreover, climate change has led to Texas experiencing an increase in drought events since 2011, which has intensified the for an impactful solution for state’s water situation. (Waterdatafortexas.org, 2017) 
+
+Texas is the second-largest state in the United States and the total area is 268,596 sq. miles (Texasalmanac.com, 2017) so that it is difficult to conceptualize the degree of drought without a visual representation. In particular, spatial and temporal visualization can improve our knowledge on the intensity of the drought’s implication on the area throughout Texas. For visualization, the manner of the exploratory focus should be clearly investigated, where factors causing drought range from “Temperature” to “Precipitation” will be analyzed.
 
 Analysis on the relationships between factors of drought, and the spread of the drought area, will be investigated.
 
 
-# Required packages and data
+# Packages, data and preprocessing {.tabset .tabset-fade}
 
-Please install and load the required packages first.
+## Required packages
 
 ```{r package loading, message =FALSE,results='hide'}
 # packages installment
@@ -36,16 +33,28 @@ library(zoo)
 library(tigris)
 knitr::opts_chunk$set(cache=TRUE)
 ```
+<br>
 
-The boundary shape file of Texas is one of TIGER products which was downloaded from Census Bureau's MAF/TIGER database.
 
-```{r shpefile loads,fig.height=100,warning=FALSE,message=FALSE}
+## Data
+1. Texas boundary shapefile
+
+The shp file was downloaded from [Census Bureau's MAF/TIGER database](https://www.census.gov/geo/maps-data/data/cbf/cbf_cousub.html) and loaded by function readOGR.
+
+```{r shpefile loads,fig.width=50,results='hide'}
 # load texas shp file
 shp <- readOGR(dsn=path.expand("data/bnd_tx/txdot-counties/txdot-2015-county-generalized_tx.shp"))
 knitr::opts_chunk$set(cache=TRUE)
 ```
 
-In this project, I utilized drought severity classification data downloaded from United States Drought Monitor (The National Drought Mitigation Center,2017). It is a weekly map that the data is calculated based on measurements of climatic, hydrologic and soil conditions as well as reported impacts and observations from contributors around the country. The time series data ranged from Janaury 5 2010 to November 28 2017, including dates and drought classification results. The classification index system and its meaning are shown as below.
+2. Drought severity classification data
+
+Downloaded from [The National Drought Mitigation Center](http://droughtmonitor.unl.edu "United States Drought Monitor"). It is a weekly map that the data is calculated based on measurements of climatic, hydrologic and soil conditions as well as reported impacts and observations from contributors around the country.(USDM, 2017) 
+
+> <p>Permission: <em>The U.S. Drought Monitor is jointly produced by the National Drought Mitigation Center at the University of Nebraska-Lincoln, the United 
+> States Department of Agriculture, and the National Oceanic and Atmospheric Administration. Map courtesy of NDMC-UNL</em>.</p>
+
+Data ranged from Janaury 5 2010 to November 28 2017, including dates and drought classification results. The classification system and its meaning are shown as below.
 ![optional caption text](img/classification.png)
 
 ```{r us drought monitor data loading, message=FALSE, warning=FALSE}
@@ -53,13 +62,49 @@ In this project, I utilized drought severity classification data downloaded from
 tx_7y <- read.csv('data/tx_7y.csv')
 tx_7y_1 <- read.csv('data/tx_7y.csv')
 tx_1031 <- read.csv('data/tx_1031.csv')
-tx <- as.data.frame(tx_1031)
-shp@data = data.frame(shp@data, tx_1031[match(shp@data[["FIPS"]], tx_1031$FIPS),])
+
 # show the data table
 datatable(data=tx_7y_1[,c(-2,-3,-9,-10,-11)],style = 'default',options = list(pageLength = 5,autoWidth = TRUE))
 ```
 
-Unluckily, the drought index for each county by state can be downloaded just in single day, therefore, I choosed the data in October 31 as my sample. To tidy my data, I did the projection work and transformated them into spatial polygon. Moreover, I mapped these data to demonstrate the distribution of drought conditions.
+Unluckily, the drought index for each county by state can be downloaded just in single day, therefore, I choosed the data released in October 31 as sample. 
+
+3. Time-series data
+
+Downloaded from [US Climate Division](Datasethttps://www.esrl.noaa.gov/psd/cgi-bin/data/timeseries/timeseries1.pl), including temperature, precipitation and Palmer Drought Severity Index(PDSI) from 2000 to October 2017. PDSI is a standardized index that spans -10 (dry) to +10 (wet) which uses available temperature and precipitation data to estimate relative dryness and it is a standardized index that spans -10 (dry) to +10 (wet).(PDSI, 2017)
+These data are shown online just like text, hence I collected them with Excel and loaded with read.csv function.
+
+```{r,message=FALSE,results='hide',warning=FALSE}
+# data2 temp$precip data loading
+min_mean <- read.csv('data/minmean.csv')
+max_mean <- read.csv('data/maxmean.csv')
+precip <- read.csv('data/precip.csv')
+drought <- read.csv('data/drought.csv')
+total <- read.csv('data/total.csv')
+
+# show the data table
+datatable(data = total,
+          options = list(pageLength = 12),
+          colnames = c('Month', 'Mean Temperature (C)', 'Precipitation (cm)', 'Palmer Drought Index'))
+
+```
+<br>
+
+## Preprocessing
+
+* Link shape file and drought classification data 
+
+```{r,message=FALSE}
+tx <- as.data.frame(tx_1031)
+shp@data = data.frame(shp@data, tx_1031[match(shp@data[["FIPS"]], tx_1031$FIPS),])
+
+# link shapefile with datatable
+shp2 <- fortify(shp)
+shp$id <- row.names(shp)
+shp2 <- left_join(shp2,shp@data,by="id")
+```
+
+* Projection and spatial polygon transformation of drought classification data
 
 ```{r data transformation,message=FALSE}
 # Transform spatial polygon data frame 
@@ -74,35 +119,26 @@ D1_loglat <- spTransform(D1, CRS("+proj=longlat +datum=WGS84"))
 D2 <- shp[shp@data$D2!=0,]
 D2_loglat <- spTransform(D2, CRS("+proj=longlat +datum=WGS84"))
 
-# link shapefile with datatable
-shp2 <- fortify(shp)
-shp$id <- row.names(shp)
-shp2 <- left_join(shp2,shp@data,by="id")
-
 ```
 
-Addtionally, I used the data downloaded from US Climate Division Dataset, including temperature, precipitation and Palmer Drought Severity Index from 2000 to October 2017. These data are shown online just like text, hence I collected them with Excel and loaded with read.csv function.
+* Time-series data transformation
 
-```{r}
-# data2 temp$precip data loading
-min_mean <- read.csv('data/minmean.csv')
-max_mean <- read.csv('data/maxmean.csv')
-precip <- read.csv('data/precip.csv')
-drought <- read.csv('data/drought.csv')
-total <- read.csv('data/total.csv')
-
+    
+    + Fahreheit to celsius _weathermetrics package_
+```{r,message=FALSE}
 # Temperature format transfromation
 total$mean.temp <- fahrenheit.to.celsius(total$mean.temp,2)
-
-# inch to cm
-total$precip <- total$precip*2.54
-
-# show the data table
-datatable(data = total,
-          options = list(pageLength = 12),
-          colnames = c('Month', 'Mean Temperature (C)', 'Precipitation (cm)', 'Palmer Drought Index'))
-
 ```
+
+
+    + Convert character type into date format and convert the table into xts format
+```{r,message=FALSE,warning=FALSE}
+total[,c("temp_10")] <- total$mean.temp/10
+total$X <- as.Date(as.yearmon(total$X))
+time <- xts(total[, c(2,3)], order.by=total$X)
+total$precip <- total$precip*2.54
+```
+<br>
 
 # Results
 
@@ -112,7 +148,7 @@ datatable(data = total,
 
 By watching the chart of time-series U.S. Drought Monitor data for 7 years, we can find that the area of drought percent area was large from 2011 to 2016, addtionally, the drought situation is relieving during 2017.
 
-```{r one-year percent area,warning=FALSE}
+```{r one-year percent area,warning=FALSE,message=FALSE}
 # convert table and date formet 
 as.data.frame(tx_7y)
 tx_7y$ReleaseDate <- as.Date(as.character(tx_7y$ReleaseDate),format="%Y%m%d");
@@ -145,7 +181,7 @@ With the visualization of drought distribution in October 31,
 #grid.arrange(ggplot0,ggplot1,ggplot2,ncol=1)  
 ```
 
-```{r}
+```{r interactive map,message=FALSE}
 
 # Use leaflet to visualize the drought distribution of each county 
 leaflet(shp@bbox) %>%
@@ -183,11 +219,7 @@ leaflet(shp@bbox) %>%
 # Analysis of causes
 ## Visualization of precipitation and temperature
 
-```{r }
-# Convert date column into date format and convert the table into xts format
-total[,c("temp_10")] <- total$mean.temp/10
-total$X <- as.Date(as.yearmon(total$X))
-time <- xts(total[, c(2,3)], order.by=total$X)
+```{r interactive data window,message=FALSE}
 # Use dygraph to chart
 dygraph(data = time,
         main = "Temperature and precipitation from 2000 to 2017 in Texas",
@@ -198,7 +230,7 @@ dygraph(data = time,
 ```
 
 ## Relationship analysis 
-```{r temp & drought}
+```{r temp & drought,message=FALSE}
 
 total%>%
   ggplot(aes(x=X))+
@@ -211,5 +243,10 @@ total%>%
 
 # Conclusions
 # References
+Waterdatafortexas.org. (2017). Water Data For Texas. [online] Available at: https://waterdatafortexas.org/drought [Accessed 7 Dec. 2017].
 
-Still working on results, conclusion, layout, and my text. But I would like to get your advice to make further improvements. Thank you!
+Texasalmanac.com. (2017). Facts | Texas Almanac. [online] Available at: http://texasalmanac.com/topics/facts-profile [Accessed 7 Dec. 2017].
+
+USDM, A. (2017). Background. [online] Droughtmonitor.unl.edu. Available at: http://droughtmonitor.unl.edu/AboutUSDM/Background.aspx [Accessed 7 Dec. 2017].
+
+(PDSI), P. (2017). Palmer Drought Severity Index (PDSI) | NCAR - Climate Data Guide. [online] Climatedataguide.ucar.edu. Available at: https://climatedataguide.ucar.edu/climate-data/palmer-drought-severity-index-pdsi [Accessed 7 Dec. 2017].
