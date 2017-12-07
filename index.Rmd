@@ -4,12 +4,11 @@ author: "YICHUN LU"
 ---
 
 # Introduction
-Texas is no stranger to drought: the state has faced several droughts in recent decades, including the most recent and most severe drought that began in 2011.Texas has faced increasing demand for water to meet the needs of its rapidly growing population. Moreover, climate change has led to Texas experiencing an increase in drought events since 2011, which has intensified the for an impactful solution for state’s water situation. (Waterdatafortexas.org, 2017) 
+Texas is no stranger to drought: the state has faced several droughts in recent decades, including the most recent and most severe drought that began in 2011.Texas has faced increasing demand for water to meet the needs of its rapidly growing population. Moreover, climate change has led to Texas experiencing an increase in drought events since 2011, which has intensified the need for an effect solution for state’s water situation. (Waterdatafortexas.org, 2017) 
 
 Texas is the second-largest state in the United States and the total area is 268,596 sq. miles (Texasalmanac.com, 2017) so that it is difficult to conceptualize the degree of drought without a visual representation. In particular, spatial and temporal visualization can improve our knowledge on the intensity of the drought’s implication on the area throughout Texas. For visualization, the manner of the exploratory focus should be clearly investigated, where factors causing drought range from “Temperature” to “Precipitation” will be analyzed.
 
 Analysis on the relationships between factors of drought, and the spread of the drought area, will be investigated.
-
 
 # Packages, data and preprocessing {.tabset .tabset-fade}
 
@@ -37,9 +36,9 @@ knitr::opts_chunk$set(cache=TRUE)
 
 
 ## Data
-1. Texas boundary shapefile
+1. Texas boundary shape file
 
-The shp file was downloaded from [Census Bureau's MAF/TIGER database](https://www.census.gov/geo/maps-data/data/cbf/cbf_cousub.html) and loaded by function readOGR.
+The shape file was downloaded from [Census Bureau's MAF/TIGER database](https://www.census.gov/geo/maps-data/data/cbf/cbf_cousub.html) and loaded by function readOGR.
 
 ```{r shpefile loads,fig.width=50,results='hide'}
 # load texas shp file
@@ -54,7 +53,7 @@ Downloaded from [The National Drought Mitigation Center](http://droughtmonitor.u
 > <p>Permission: <em>The U.S. Drought Monitor is jointly produced by the National Drought Mitigation Center at the University of Nebraska-Lincoln, the United 
 > States Department of Agriculture, and the National Oceanic and Atmospheric Administration. Map courtesy of NDMC-UNL</em>.</p>
 
-Data ranged from Janaury 5 2010 to November 28 2017, including dates and drought classification results. The classification system and its meaning are shown as below.
+Data ranged from January 5 2010 to November 28 2017, including dates and drought classification results. The classification system and its meaning are shown as below.
 ![optional caption text](img/classification.png)
 
 ```{r us drought monitor data loading, message=FALSE, warning=FALSE}
@@ -67,7 +66,7 @@ tx_1031 <- read.csv('data/tx_1031.csv')
 datatable(data=tx_7y_1[,c(-2,-3,-9,-10,-11)],style = 'default',options = list(pageLength = 5,autoWidth = TRUE))
 ```
 
-Unluckily, the drought index for each county by state can be downloaded just in single day, therefore, I choosed the data released in October 31 as sample. 
+Unluckily, the drought index for each county by state can be downloaded just in single day, therefore, I chose the data released in October 31 as sample. 
 
 3. Time-series data
 
@@ -92,7 +91,7 @@ datatable(data = total,
 
 ## Preprocessing
 
-* Link shape file and drought classification data 
+* Link shape file and drought classification data
 
 ```{r,message=FALSE}
 tx <- as.data.frame(tx_1031)
@@ -103,6 +102,17 @@ shp2 <- fortify(shp)
 shp$id <- row.names(shp)
 shp2 <- left_join(shp2,shp@data,by="id")
 ```
+
+
+* Convert character type into date type
+
+```{r,message=FALSE}
+# convert table and date formet 
+as.data.frame(tx_7y)
+tx_7y$ReleaseDate <- as.Date(as.character(tx_7y$ReleaseDate),format="%Y%m%d");
+tx_7y[,c("y")] <- 100
+```
+
 
 * Projection and spatial polygon transformation of drought classification data
 
@@ -132,7 +142,7 @@ total$mean.temp <- fahrenheit.to.celsius(total$mean.temp,2)
 
 
 
-    + Convert character type into date format and convert the table into xts format
+    + Convert table into xts format
 ```{r,message=FALSE,warning=FALSE}
 total[,c("temp_10")] <- total$mean.temp/10
 total$X <- as.Date(as.yearmon(total$X))
@@ -153,17 +163,13 @@ total$precip <- total$precip*2.54
 By watching the chart of time-series U.S. Drought Monitor data for 7 years, we can find that the area of drought percent area was large since 2011 to 2016, however, the drought situation has been relieving during 2017.
 
 ```{r one-year percent area,warning=FALSE,message=FALSE}
-# convert table and date formet 
-as.data.frame(tx_7y)
-tx_7y$ReleaseDate <- as.Date(as.character(tx_7y$ReleaseDate),format="%Y%m%d");
-
 # chart of one-year drought percent area
-g <- ggplot(tx_7y, aes(ReleaseDate, tx_7y$D0),fill='black') + geom_area() + geom_area(aes(x = ReleaseDate, y=tx_7y$D1), fill='yellow') + geom_area(aes(x = ReleaseDate, y=tx_7y$D2), fill='orange') + geom_area(aes(x = ReleaseDate, y=tx_7y$D3), fill='red') + xlab("Year") + ylab("Percent Area") + scale_fill_continuous(guide = guide_legend())
+ggplot(tx_7y, aes(x=ReleaseDate,D0,fill="D0"),color='black') + geom_area() + geom_area(aes(x = ReleaseDate,D1,fill="D1")) + geom_area(aes(x = ReleaseDate, D2,fill="D2")) + geom_area(aes(x = ReleaseDate, D3, fill="D3"))  + xlab("Year") + ylab("Percent Area") 
 ```
 
 ### Sptial distribution of drought in Texas in October 31 2017
 
-Drought sptail distribution maps are shown as below.
+Drought spatial distribution maps are shown as below.
 
 ```{r visualization the drought area with different drought degree,warning=FALSE}
 # visualization the drought area in D1 degree_ moderate drought
@@ -235,7 +241,7 @@ dygraph(data = time,
   dyOptions(stackedGraph = TRUE) %>%
   frameWidget(height =500)
 ```
-Compared with temperature changing line, precipitation's trend line flutuates more dramatically, so that the long term precipitation condition is not very stable. Hence, it is more likely to be dry without steady raining.
+Compared with temperature changing line, precipitation's trend line fluctuates more dramatically, so that the long term precipitation condition is not very stable. Hence, it is more likely to be dry without steady raining.
 
 
 ## Relationship analysis 
@@ -243,17 +249,17 @@ Compared with temperature changing line, precipitation's trend line flutuates mo
 ```{r temp & drought,message=FALSE}
 total%>%
   ggplot(aes(x=X))+
-    geom_line(aes(y=Palmer.Drought.Index.Mean),col="grey")+
-  geom_line(aes(y=total$precip),col="blue")+
-  geom_line(aes(y=mean.temp),col="red")+
-   scale_color_discrete(name = "Y series", labels = c("PDSI", "Precipitation","temperature"))
+    geom_line(aes(y=Palmer.Drought.Index.Mean,col="grey"))+
+  geom_line(aes(y=total$precip,col="blue"))+
+  geom_line(aes(y=mean.temp,col="red"))+
+   scale_color_discrete(name = "Legend", labels = c("Precipitation", "PDSI","Temperature"))
     
 ```
 
+While observing the line graph, we can find that, Texas suffered severe drought during 2011 to 2015. In this period, temperature did not change acutely but precipitation was less than average values in other years. As such, we can guess that less precipitation may be the cause of drought since 2011. With stable temperature and less precipitation, there was few rainfall in this term, in other words, it would be more likely to be dry.
 
-# Conclusions
-
-
+# Conclusion
+Drought is definitely a feature since seventeen years ago. The highly inverse correlation in precipitation and temperature can only mean that as the temperature grows warmer, the less precipitation that it will be. Water rationing is not a long term solution, and new water supply has to be evaluated. Proposals like building new desalination plant in Texas is viable, as Texas is an energy hub with high efficient energy pricing.
 
 # References
 Waterdatafortexas.org. (2017). Water Data For Texas. [online] Available at: https://waterdatafortexas.org/drought [Accessed 7 Dec. 2017].
