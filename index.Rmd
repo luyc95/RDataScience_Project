@@ -71,7 +71,7 @@ Unluckily, the drought index for each county by state can be downloaded just in 
 
 3. Time-series data
 
-Downloaded from [US Climate Division](Datasethttps://www.esrl.noaa.gov/psd/cgi-bin/data/timeseries/timeseries1.pl), including temperature, precipitation and Palmer Drought Severity Index(PDSI) from 2000 to October 2017. PDSI is a standardized index that spans -10 (dry) to +10 (wet) which uses available temperature and precipitation data to estimate relative dryness and it is a standardized index that spans -10 (dry) to +10 (wet).(PDSI, 2017)
+Downloaded from [US Climate Division](Datasethttps://www.esrl.noaa.gov/psd/cgi-bin/data/timeseries/timeseries1.pl), including temperature, precipitation and Palmer Drought Severity Index(PDSI) from 2000 to October 2017. PDSI is a standardized index that spans -10 (dry) to +10 (wet) which uses available temperature and precipitation data to estimate relative dryness.(PDSI, 2017)
 These data are shown online just like text, hence I collected them with Excel and loaded with read.csv function.
 
 ```{r,message=FALSE,results='hide',warning=FALSE}
