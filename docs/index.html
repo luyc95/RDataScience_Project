@@ -475,6 +475,7 @@ leaflet(shp@bbox) %&gt;%
                 stroke = T,
                 fillOpacity = 0.1)%&gt;%
   addPolygons(data=D0_loglat,
+              group = &quot;D0&quot;,
               label=paste(D0_loglat$CNTY_NM,&quot; (D0 =&quot;,D0_loglat$D0,&quot;)&quot;),
               weight = 2,
               color = &quot;yellow&quot;,
@@ -482,6 +483,7 @@ leaflet(shp@bbox) %&gt;%
               stroke = F,
               fillOpacity = 0.4)%&gt;%
   addPolygons(data=D1_loglat,
+              group = &quot;D1&quot;,
               label=paste(D1_loglat$CNTY_NM,&quot; (D1 =&quot;,D1_loglat$D1,&quot;)&quot;),
               weight = 3,
               color = &quot;orange&quot;,
@@ -489,6 +491,7 @@ leaflet(shp@bbox) %&gt;%
               stroke = F,
               fillOpacity = 0.8)%&gt;%
   addPolygons(data=D2_loglat,
+              group = &quot;D2&quot;,
               label=paste(D2_loglat$CNTY_NM,&quot; (D2 =&quot;,D2_loglat$D2,&quot;)&quot;),
               weight = 4,
               color = &quot;red&quot;,
@@ -496,6 +499,9 @@ leaflet(shp@bbox) %&gt;%
               stroke = F,
               fillOpacity = 1)%&gt;%
   addMiniMap()%&gt;%
+    addLayersControl(
+    baseGroups = c(&quot;D0&quot;, &quot;D1&quot;, &quot;D2&quot;),
+    options = layersControlOptions(collapsed = FALSE))%&gt;%
   frameWidget(height = 500)</code></pre>
 <div id="htmlwidget-91b51305f06bfd4350fe" style="width:100%;height:500px;" class="widgetframe html-widget"></div>
 <script type="application/json" data-for="htmlwidget-91b51305f06bfd4350fe">{"x":{"url":"index_files/figure-html//widgets/widget_interactive map.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
@@ -512,8 +518,9 @@ dygraph(data = time,
   dyRangeSelector(dateWindow = c(&quot;2000-01-01&quot;, &quot;2017-10-01&quot;))%&gt;%
   dyOptions(stackedGraph = TRUE) %&gt;%
   frameWidget(height =500)</code></pre>
-<p><div id="htmlwidget-be17da6760bc2b9c8896" style="width:100%;height:500px;" class="widgetframe html-widget"></div>
-<script type="application/json" data-for="htmlwidget-be17da6760bc2b9c8896">{"x":{"url":"index_files/figure-html//widgets/widget_interactive data window.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script> Compared with temperature changing line, precipitation’s trend line fluctuates more dramatically, so that the long term precipitation condition is not very stable. Hence, it is more likely to be dry without steady raining.</p>
+<div id="htmlwidget-be17da6760bc2b9c8896" style="width:100%;height:500px;" class="widgetframe html-widget"></div>
+<script type="application/json" data-for="htmlwidget-be17da6760bc2b9c8896">{"x":{"url":"index_files/figure-html//widgets/widget_interactive data window.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
+<p>Compared with temperature changing line, precipitation’s trend line fluctuates more dramatically, so that the long term precipitation condition is not very stable. Hence, it is more likely to be dry without steady raining.</p>
 </div>
 </div>
 <div id="relationship-analysis" class="section level2">
