@@ -192,7 +192,7 @@ grid.arrange(ggplot0,ggplot1,ggplot2,nrow=1)
 
 Observing the visualization of drought distribution in October 31, most of counties were in abnormally dry. Four counties in northern Texas (Cottle, Foard, King and Knox), several counties in eastern Texas, and some counties in southern Texas were in moderate dry situation. Jim Hogg county suffered in severe drought in this day. Specific value can be observed by hovering mouse over the relevant cell in the interactive map.
 
-```{r interactive map,message=FALSE}
+```{r interactive map,message=FALSE,warning=FALSE}
 # Use leaflet to visualize the drought distribution of each county 
 leaflet(shp@bbox) %>%
   addTiles()%>%
@@ -231,7 +231,7 @@ leaflet(shp@bbox) %>%
 ## Analysis of causes
 
 ### Visualization of precipitation and temperature
-```{r interactive data window,message=FALSE}
+```{r interactive data window,message=FALSE,warning=FALSE}
 # Use dygraph to chart
 dygraph(data = time,
         main = "Temperature and precipitation from 2000 to 2017 in Texas",
@@ -245,7 +245,7 @@ Compared with temperature changing line, precipitation's trend line fluctuates m
 
 ## Relationship analysis 
 
-```{r temp & drought,message=FALSE}
+```{r temp & drought,message=FALSE,warning=FALSE}
 total%>%
   ggplot(aes(x=X))+
     geom_line(aes(y=Palmer.Drought.Index.Mean,col="grey"))+
