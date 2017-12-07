@@ -166,6 +166,7 @@ By watching the chart of time-series U.S. Drought Monitor data for 7 years, we c
 ggplot(tx_7y, aes(x=ReleaseDate,D0,fill="D0"),color='black') + geom_area() + geom_area(aes(x = ReleaseDate,D1,fill="D1")) + geom_area(aes(x = ReleaseDate, D2,fill="D2")) + geom_area(aes(x = ReleaseDate, D3, fill="D3"))  + xlab("Year") + ylab("Percent Area") 
 ```
 
+
 ### Sptial distribution of drought in Texas in October 31 2017
 
 Drought spatial distribution maps are shown as below.
