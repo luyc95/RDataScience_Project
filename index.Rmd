@@ -229,9 +229,9 @@ leaflet(shp@bbox) %>%
 ```
 
 
-# Analysis of causes
+## Analysis of causes
 
-## Visualization of precipitation and temperature
+### Visualization of precipitation and temperature
 ```{r interactive data window,message=FALSE}
 # Use dygraph to chart
 dygraph(data = time,
