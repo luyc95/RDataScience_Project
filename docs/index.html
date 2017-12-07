@@ -432,7 +432,7 @@ total$precip &lt;- total$precip*2.54</code></pre>
 <h2>Visualization of drought</h2>
 <div id="drought-percent-area-in-texas-from-2010-to-2017" class="section level3">
 <h3>Drought Percent area in Texas from 2010 to 2017</h3>
-<p>By watching the chart of time-series U.S. Drought Monitor data for 7 years, we can find that the area of drought percent area was large from 2011 to 2016, addtionally, the drought situation is relieving during 2017.</p>
+<p>By watching the chart of time-series U.S. Drought Monitor data for 7 years, we can find that the area of drought percent area was large since 2011 to 2016, however, the drought situation has been relieving during 2017.</p>
 <pre class="r"><code># convert table and date formet 
 as.data.frame(tx_7y)</code></pre>
 <div data-pagedtable="false">
@@ -447,24 +447,26 @@ g &lt;- ggplot(tx_7y, aes(ReleaseDate, tx_7y$D0),fill=&#39;black&#39;) + geom_ar
 </div>
 <div id="sptial-distribution-of-drought-in-texas-in-october-31-2017" class="section level3">
 <h3>Sptial distribution of drought in Texas in October 31 2017</h3>
-<p>With the visualization of drought distribution in October 31,</p>
+<p>Drought sptail distribution maps are shown as below.</p>
 <pre class="r"><code># visualization the drought area in D1 degree_ moderate drought
-#g0 &lt;- ggplot(data = shp2,aes(x=long,y=lat,group=group,fill=D0))+ geom_polygon() + coord_map() + scale_fill_gradient(low = &#39;white&#39;,high = &#39;red&#39;)
+g0 &lt;- ggplot(data = shp2,aes(x=long,y=lat,group=group,fill=D0))+ geom_polygon() + coord_map() + scale_fill_gradient(low = &#39;white&#39;,high = &#39;red&#39;)
 
-#ggplot0&lt;- g0+ theme(legend.position = &quot;right&quot;) + theme(axis.ticks = element_blank(), axis.text = element_blank())
+ggplot0&lt;- g0+ theme(legend.position = &quot;right&quot;) + theme(axis.ticks = element_blank(), axis.text = element_blank())
 
 # visualization the drought area in D2 degree_ severe drought
-#g1 &lt;- ggplot(data = shp2,aes(x=long,y=lat,group=group,fill=D1)) + geom_polygon() + coord_map() + scale_fill_gradient(low = &#39;white&#39;,high = &#39;red&#39;)
+g1 &lt;- ggplot(data = shp2,aes(x=long,y=lat,group=group,fill=D1)) + geom_polygon() + coord_map() + scale_fill_gradient(low = &#39;white&#39;,high = &#39;red&#39;)
 
-#ggplot1 &lt;- g1+ theme(legend.position = &quot;right&quot;)+ theme(axis.ticks = element_blank(), axis.text = element_blank())
+ggplot1 &lt;- g1+ theme(legend.position = &quot;right&quot;)+ theme(axis.ticks = element_blank(), axis.text = element_blank())
 
 # visualization the drought area in D3 Extreme_ severe drought
-#g2 &lt;- ggplot(data = shp2,aes(x=long,y=lat,group=group,fill=D2))+ geom_polygon() + coord_map() + scale_fill_gradient(low = &#39;white&#39;,high = &#39;red&#39;)
+g2 &lt;- ggplot(data = shp2,aes(x=long,y=lat,group=group,fill=D2))+ geom_polygon() + coord_map() + scale_fill_gradient(low = &#39;white&#39;,high = &#39;red&#39;)
 
-#ggplot2 &lt;- g2+ theme(legend.position = &quot;right&quot;)+ theme(axis.ticks = element_blank(), axis.text = element_blank())
+ggplot2 &lt;- g2+ theme(legend.position = &quot;right&quot;)+ theme(axis.ticks = element_blank(), axis.text = element_blank())
 
 # build the three graph in one page
-#grid.arrange(ggplot0,ggplot1,ggplot2,ncol=1)  </code></pre>
+grid.arrange(ggplot0,ggplot1,ggplot2,nrow=1)  </code></pre>
+<p><img src="index_files/figure-html/visualization%20the%20drought%20area%20with%20different%20drought%20degree-1.png" width="672" /></p>
+<p>Observing the visualization of drought distribution in October 31, most of counties were in abnormally dry. Four counties in northern Texas (Cottle, Foard, King and Knox), several counties in eastern Texas, and some counties in southern Texas were in moderate dry situation. Jim Hogg county suffered in severe drought in this day. Specific value can be observed by hovering mouse over the relevant cell in the interactive map.</p>
 <pre class="r"><code># Use leaflet to visualize the drought distribution of each county 
 leaflet(shp@bbox) %&gt;%
   addTiles()%&gt;%
@@ -497,8 +499,15 @@ leaflet(shp@bbox) %&gt;%
               fillOpacity = 1)%&gt;%
   addMiniMap()%&gt;%
   frameWidget(height = 500)</code></pre>
-<p><div id="htmlwidget-d49974b3c0be554acdb9" style="width:100%;height:500px;" class="widgetframe html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d49974b3c0be554acdb9">{"x":{"url":"index_files/figure-html//widgets/widget_interactive map.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script> # Analysis of causes ## Visualization of precipitation and temperature</p>
+<div id="htmlwidget-91b51305f06bfd4350fe" style="width:100%;height:500px;" class="widgetframe html-widget"></div>
+<script type="application/json" data-for="htmlwidget-91b51305f06bfd4350fe">{"x":{"url":"index_files/figure-html//widgets/widget_interactive map.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</div>
+<div id="analysis-of-causes" class="section level1">
+<h1>Analysis of causes</h1>
+<div id="visualization-of-precipitation-and-temperature" class="section level2">
+<h2>Visualization of precipitation and temperature</h2>
 <pre class="r"><code># Use dygraph to chart
 dygraph(data = time,
         main = &quot;Temperature and precipitation from 2000 to 2017 in Texas&quot;,
@@ -508,7 +517,6 @@ dygraph(data = time,
   frameWidget(height =500)</code></pre>
 <div id="htmlwidget-b26a517c446f699ab146" style="width:100%;height:500px;" class="widgetframe html-widget"></div>
 <script type="application/json" data-for="htmlwidget-b26a517c446f699ab146">{"x":{"url":"index_files/figure-html//widgets/widget_interactive data window.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
-</div>
 </div>
 <div id="relationship-analysis" class="section level2">
 <h2>Relationship analysis</h2>

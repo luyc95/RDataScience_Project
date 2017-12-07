@@ -131,6 +131,7 @@ total$mean.temp <- fahrenheit.to.celsius(total$mean.temp,2)
 ```
 
 
+
     + Convert character type into date format and convert the table into xts format
 ```{r,message=FALSE,warning=FALSE}
 total[,c("temp_10")] <- total$mean.temp/10
@@ -140,13 +141,16 @@ total$precip <- total$precip*2.54
 ```
 <br>
 
+
 # Results
+
 
 ## Visualization of drought 
 
+
 ### Drought Percent area in Texas from 2010 to 2017
 
-By watching the chart of time-series U.S. Drought Monitor data for 7 years, we can find that the area of drought percent area was large from 2011 to 2016, addtionally, the drought situation is relieving during 2017.
+By watching the chart of time-series U.S. Drought Monitor data for 7 years, we can find that the area of drought percent area was large since 2011 to 2016, however, the drought situation has been relieving during 2017.
 
 ```{r one-year percent area,warning=FALSE,message=FALSE}
 # convert table and date formet 
@@ -159,30 +163,31 @@ g <- ggplot(tx_7y, aes(ReleaseDate, tx_7y$D0),fill='black') + geom_area() + geom
 
 ### Sptial distribution of drought in Texas in October 31 2017
 
-With the visualization of drought distribution in October 31, 
+Drought sptail distribution maps are shown as below.
 
-```{r visualization the drought area with different drought degree}
+```{r visualization the drought area with different drought degree,warning=FALSE}
 # visualization the drought area in D1 degree_ moderate drought
-#g0 <- ggplot(data = shp2,aes(x=long,y=lat,group=group,fill=D0))+ geom_polygon() + coord_map() + scale_fill_gradient(low = 'white',high = 'red')
+g0 <- ggplot(data = shp2,aes(x=long,y=lat,group=group,fill=D0))+ geom_polygon() + coord_map() + scale_fill_gradient(low = 'white',high = 'red')
 
-#ggplot0<- g0+ theme(legend.position = "right") + theme(axis.ticks = element_blank(), axis.text = element_blank())
+ggplot0<- g0+ theme(legend.position = "right") + theme(axis.ticks = element_blank(), axis.text = element_blank())
 
 # visualization the drought area in D2 degree_ severe drought
-#g1 <- ggplot(data = shp2,aes(x=long,y=lat,group=group,fill=D1)) + geom_polygon() + coord_map() + scale_fill_gradient(low = 'white',high = 'red')
+g1 <- ggplot(data = shp2,aes(x=long,y=lat,group=group,fill=D1)) + geom_polygon() + coord_map() + scale_fill_gradient(low = 'white',high = 'red')
 
-#ggplot1 <- g1+ theme(legend.position = "right")+ theme(axis.ticks = element_blank(), axis.text = element_blank())
+ggplot1 <- g1+ theme(legend.position = "right")+ theme(axis.ticks = element_blank(), axis.text = element_blank())
 
 # visualization the drought area in D3 Extreme_ severe drought
-#g2 <- ggplot(data = shp2,aes(x=long,y=lat,group=group,fill=D2))+ geom_polygon() + coord_map() + scale_fill_gradient(low = 'white',high = 'red')
+g2 <- ggplot(data = shp2,aes(x=long,y=lat,group=group,fill=D2))+ geom_polygon() + coord_map() + scale_fill_gradient(low = 'white',high = 'red')
 
-#ggplot2 <- g2+ theme(legend.position = "right")+ theme(axis.ticks = element_blank(), axis.text = element_blank())
+ggplot2 <- g2+ theme(legend.position = "right")+ theme(axis.ticks = element_blank(), axis.text = element_blank())
 
 # build the three graph in one page
-#grid.arrange(ggplot0,ggplot1,ggplot2,ncol=1)  
+grid.arrange(ggplot0,ggplot1,ggplot2,nrow=1)  
 ```
 
-```{r interactive map,message=FALSE}
+Observing the visualization of drought distribution in October 31, most of counties were in abnormally dry. Four counties in northern Texas (Cottle, Foard, King and Knox), several counties in eastern Texas, and some counties in southern Texas were in moderate dry situation. Jim Hogg county suffered in severe drought in this day. Specific value can be observed by hovering mouse over the relevant cell in the interactive map.
 
+```{r interactive map,message=FALSE}
 # Use leaflet to visualize the drought distribution of each county 
 leaflet(shp@bbox) %>%
   addTiles()%>%
@@ -216,9 +221,11 @@ leaflet(shp@bbox) %>%
   addMiniMap()%>%
   frameWidget(height = 500)
 ```
-# Analysis of causes
-## Visualization of precipitation and temperature
 
+
+# Analysis of causes
+
+## Visualization of precipitation and temperature
 ```{r interactive data window,message=FALSE}
 # Use dygraph to chart
 dygraph(data = time,
@@ -228,20 +235,26 @@ dygraph(data = time,
   dyOptions(stackedGraph = TRUE) %>%
   frameWidget(height =500)
 ```
+Compared with temperature changing line, precipitation's trend line flutuates more dramatically, so that the long term precipitation condition is not very stable. Hence, it is more likely to be dry without steady raining.
+
 
 ## Relationship analysis 
-```{r temp & drought,message=FALSE}
 
+```{r temp & drought,message=FALSE}
 total%>%
   ggplot(aes(x=X))+
     geom_line(aes(y=Palmer.Drought.Index.Mean),col="grey")+
   geom_line(aes(y=total$precip),col="blue")+
-  geom_line(aes(y=mean.temp),col="red")
+  geom_line(aes(y=mean.temp),col="red")+
+   scale_color_discrete(name = "Y series", labels = c("PDSI", "Precipitation","temperature"))
     
 ```
 
 
 # Conclusions
+
+
+
 # References
 Waterdatafortexas.org. (2017). Water Data For Texas. [online] Available at: https://waterdatafortexas.org/drought [Accessed 7 Dec. 2017].
 
