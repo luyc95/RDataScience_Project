@@ -10,6 +10,7 @@ Texas is the second-largest state in the United States and the total area is 268
 
 Analysis on the relationships between factors of drought, and the spread of the drought area, will be investigated.
 
+
 # Packages, data and preprocessing {.tabset .tabset-fade}
 
 ## Required packages
