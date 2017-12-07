@@ -106,9 +106,7 @@ shp2 <- left_join(shp2,shp@data,by="id")
 
 
 * Convert character type into date type
-
-```{r,message=FALSE}
-# convert table and date formet 
+```{r,message=FALSE,warning=FALSE,results='hide'}
 as.data.frame(tx_7y)
 tx_7y$ReleaseDate <- as.Date(as.character(tx_7y$ReleaseDate),format="%Y%m%d");
 tx_7y[,c("y")] <- 100
