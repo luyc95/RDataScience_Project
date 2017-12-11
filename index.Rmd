@@ -1,6 +1,7 @@
 ---
 title: "Drought in Texas"
 author: "YICHUN LU"
+output: pdf_document
 ---
 
 # Introduction
