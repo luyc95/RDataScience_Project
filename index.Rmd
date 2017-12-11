@@ -5,6 +5,8 @@ output: pdf_document
 ---
 
 # Introduction
+
+
 **Texas is no stranger to drought.**  (Waterdatafortexas.org, 2017) 
 
 Texas is the second-largest state in the United States with a total area of 268,596 sq. miles (Texasalmanac.com, 2017). Such a large embodiment with drought affected area is difficult to conceptualize without a visual representation. As a result, spatial and temporal visualization would improve information visibility on the intensity of the drought’s implication on the area throughout Texas. Hence, the purpose for this project is to demonstrate the severity and distribution of drought by visualizing U.S. Drought Monitor data. 
@@ -260,6 +262,7 @@ In comparison with temperature changing line, the precipitation's trend line flu
 
 ### Relationship analysis 
 
+
 ```{r temp & drought,message=FALSE,warning=FALSE}
 total%>%
   ggplot(aes(x=X))+
@@ -272,8 +275,10 @@ total%>%
 
 In observance of the line graph, Texas suffers from severe drought during 2011 to 2015. During that period, temperature changed acutely, and precipitation was less than average values over the years. As such, we can estimate that less precipitation from warmer temperature may also be the likely cause of drought during those years than temperature.
 
+
 # Conclusion
 Drought is definitely a feature since seventeen years ago. The highly inverse correlation in precipitation and temperature can only mean that as the temperature grows warmer, the less precipitation that it will be. Water rationing is not a long term solution, and new water supply has to be evaluated. Proposals like building new desalination plant in Texas is viable, as Texas is an energy hub with highly efficient energy pricing.
+
 
 # References
 Waterdatafortexas.org. (2017). Water Data For Texas. [online] Available at: https://waterdatafortexas.org/drought
