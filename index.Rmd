@@ -6,16 +6,16 @@ author: "YICHUN LU"
 # Introduction
 **Texas is no stranger to drought.**  (Waterdatafortexas.org, 2017) 
 
+Texas is the second-largest state in the United States with a total area of 268,596 sq. miles (Texasalmanac.com, 2017). Such a large embodiment with drought affected area is difficult to conceptualize without a visual representation. As a result, spatial and temporal visualization would improve information visibility on the intensity of the drought’s implication on the area throughout Texas. Hence, the purpose for this project is to demonstrate the severity and distribution of drought by visualizing U.S. Drought Monitor data. 
 
-Texas has experienced several droughts in recent decade, including the most recent and most severe drought that began in 2011.Texas has faced increasing demand for water to meet the needs of its rapidly growing population. (Twdb.texas.gov, 2017) Moreover, climate change has led to Texas experiencing an increase in drought events since 2011, which has intensified the need for an effect solution for state’s water situation. (Epa.gov, 2017)
+Texas has experienced several droughts in recent decade, including the most recent and most severe drought that began in 2011. Its' rapidly growing population increasingly demand for more water (Twdb.texas.gov, 2017). Adding to the severity, climate change has also intensified the spike in water requirements demanding an effective solution for state’s water situation (Epa.gov, 2017). The visualization will realize the temporal changes through annual series.
 
-Texas is the second-largest state in the United States and the total area is 268,596 sq. miles (Texasalmanac.com, 2017) so that it is difficult to conceptualize the degree of drought without a visual representation. Particularly, spatial and temporal visualization can improve our knowledge on the intensity of the drought’s implication on the area throughout Texas. Hence, the first task for this project is to demonstrate the severity and distribution of drought by visualize U.S. Drought Monitor data. 
 
-In addition, there are two main factors that contribute to dry phenomenon directly, which are temperature and precipitation.(Geochange.er.usgs.gov, 2017) But, which factor did more impact on drought? Simple analysis on the relationships between factors of drought, and the spread of the drought area, will be investigated by visualization and comparision in order to find that factor.
+Lastly, two prevalent factors have identified that contributed to the dry phenomenon directly, which is temperature and precipitation (Geochange.er.usgs.gov, 2017). The feature question of which factor is more impactful will be attempted to be visually represented for knowledge discovery. The correlational statistics will be produced with the spread of drought area and compared.
 <br>
 
 
-# Packages, data and preprocessing {.tabset .tabset-fade}
+# Methodology: Packages, data and preprocessing {.tabset .tabset-fade}
 
 ## Required packages
 
@@ -53,18 +53,17 @@ knitr::opts_chunk$set(cache=TRUE)
 
 2. Drought severity classification data
 
-Downloaded from [The National Drought Mitigation Center](http://droughtmonitor.unl.edu "United States Drought Monitor"). This data updated weekly based on measuring result of meteorological, hydrologic and soil conditions, besides observations and influences reported by donors across the country. (USDM, 2017) 
+The classification data was downloaded from [The National Drought Mitigation Center](http://droughtmonitor.unl.edu "United States Drought Monitor"). Data is updated weekly based on measuring result of meteorological, hydrologic and soil conditions, besides observations and influences reported by donors across the country (USDM, 2017). 
 
-Permission: <em>The U.S. Drought Monitor is jointly produced by the National Drought Mitigation Center at the University of Nebraska-Lincoln, the United 
-States Department of Agriculture, and the National Oceanic and Atmospheric Administration. Map courtesy of NDMC-UNL</em>.
+Permission: <em>The U.S. Drought Monitor is jointly produced by the National Drought Mitigation Center at the University of Nebraska-Lincoln, the United States Department of Agriculture, and the National Oceanic and Atmospheric Administration. Map courtesy of NDMC-UNL</em>.
 
-These data include dates and drought classification results. The classification system and its meaning are shown as below.
+These data include dates and drought classification results. The classification system and descriptions are shown as below:
 
 <div style="width:500px; height=400px">
 ![Drought classification system](img/classification.png)
 </div>
 
-In this project, the used data ranged from January 5 2010 to November 28 2017. According to resource type, they are loaded by read.csv function.
+As for the project, the data used range from January 5 2010 to November 28 2017. The data is loaded using read.csv function.
 ```{r us drought monitor data loading, message=FALSE, warning=FALSE}
 #  us monitor data loading
 tx_7y <- read.csv('data/tx_7y.csv')
@@ -75,12 +74,12 @@ tx_1031 <- read.csv('data/tx_1031.csv')
 datatable(data=tx_7y_1[,c(-2,-3,-9,-10,-11)],style = 'default',options = list(pageLength = 5,autoWidth = TRUE))
 ```
 
-Unluckily, the drought index for each county by state can be downloaded just in single day, therefore, I chose the data released in October 31 as visulatiztion sample . 
+Drought index for each county by state for a single day of October 31 was chosen as visualization sample . 
 
 3. Time-series data
 
 Downloaded from [US Climate Division](Datasethttps://www.esrl.noaa.gov/psd/cgi-bin/data/timeseries/timeseries1.pl), including temperature, precipitation and Palmer Drought Severity Index(PDSI) from 2000 to October 2017. PDSI is a standardized index that spans -10 (dry) to +10 (wet) which uses available temperature and precipitation data to estimate relative dryness.(PDSI, 2017)
-These data are shown online just like text, hence I collected them with Excel and loaded with read.csv function. 
+These data are text, but organized in Excel for the project, and loaded with read.csv function. 
 
 ```{r,message=FALSE,results='hide',warning=FALSE}
 # data2 temp$precip data loading
@@ -163,7 +162,7 @@ total$precip <- total$precip*2.54
 
 ### Drought Percent area in Texas from 2010 to 2017
 
-By watching the chart of time-series U.S. Drought Monitor data for 7 years, we can find that the area of drought percent area was large since 2011 to 2016, however, the drought situation has been relieving during 2017.
+The charted time-series of U.S. Drought Monitor has visualized the information for drought area of percentage has been enlarging from 2011 to 2016. Significantly, the drought situation is seen relieving beginning 2017.
 
 ```{r one-year percent area,warning=FALSE,message=FALSE}
 # chart of one-year drought percent area
@@ -195,7 +194,7 @@ ggplot2 <- g2+ theme(legend.position = "right")+ theme(axis.ticks = element_blan
 grid.arrange(ggplot0,ggplot1,ggplot2,nrow=1)  
 ```
 
-Observing the visualization of drought distribution in October 31, most of counties were in abnormally dry. Four counties in northern Texas (Cottle, Foard, King and Knox), several counties in eastern Texas, and some counties in southern Texas were in moderate dry situation. Jim Hogg county suffered in severe drought in this day. Specific value can be observed by hovering mouse over the relevant cell in the interactive map.
+In observance of the visualization of drought distribution in October 31 over the years, most of counties were abnormally dry. Four counties in northern Texas (Cottle, Foard, King and Knox), several counties in eastern Texas, and some counties in southern Texas were in moderate dry situation. Jim Hogg county is stil currently suffering from drought. Specific values can be observed by mouse over the relevant cell in the interactive map.
 
 ```{r interactive map,message=FALSE,warning=FALSE}
 # Use leaflet to visualize the drought distribution of each county 
@@ -254,7 +253,7 @@ dygraph(data = time,
 ```
 
 
-Compared with temperature changing line, precipitation's trend line fluctuates more dramatically, so that the long term precipitation condition is not very stable. Hence, it is more likely to be dry without steady raining.
+In comparison with temperature changing line, the precipitation's trend line fluctuates in a volatile manner, suggesting that long term precipitation condition is not stable. Hence, it is likelier to suffer from dry seasons.
 
 
 ### Relationship analysis 
@@ -269,10 +268,10 @@ total%>%
     
 ```
 
-While observing the line graph, we can find that, Texas suffered severe drought during 2011 to 2015. In this period, temperature did not change acutely but precipitation was less than average values in other years. As such, we can guess that less precipitation may be the cause of drought since 2011. With stable temperature and less precipitation, there was few rainfall in this term, in other words, it would be more likely to be dry.
+In observance of the line graph, Texas suffers from severe drought during 2011 to 2015. During that period, temperature changed acutely, and precipitation was less than average values over the years. As such, we can estimate that less precipitation from warmer temperature may also be the likely cause of drought during those years than temperature.
 
 # Conclusion
-Drought is definitely a feature since seventeen years ago. The highly inverse correlation in precipitation and temperature can only mean that as the temperature grows warmer, the less precipitation that it will be. Water rationing is not a long term solution, and new water supply has to be evaluated. Proposals like building new desalination plant in Texas is viable, as Texas is an energy hub with high efficient energy pricing.
+Drought is definitely a feature since seventeen years ago. The highly inverse correlation in precipitation and temperature can only mean that as the temperature grows warmer, the less precipitation that it will be. Water rationing is not a long term solution, and new water supply has to be evaluated. Proposals like building new desalination plant in Texas is viable, as Texas is an energy hub with highly efficient energy pricing.
 
 # References
 Waterdatafortexas.org. (2017). Water Data For Texas. [online] Available at: https://waterdatafortexas.org/drought
