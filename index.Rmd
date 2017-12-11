@@ -234,10 +234,10 @@ leaflet() %>%
               stroke = F,
               fillOpacity = 1)%>%
   addMiniMap()%>%
-   # addLayersControl(
-   # baseGroups = c("D0", "D1", "D2"),
-   # options = layersControlOptions(collapsed = FALSE)
-   # )%>%
+    addLayersControl(
+    baseGroups = c("D0", "D1", "D2"),
+    options = layersControlOptions(collapsed = FALSE)
+    )%>%
   frameWidget(height = 500)
 ```
 
