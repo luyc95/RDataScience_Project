@@ -472,7 +472,7 @@ grid.arrange(ggplot0,ggplot1,ggplot2,nrow=1)  </code></pre>
 <p><img src="index_files/figure-html/visualization%20the%20drought%20area%20with%20different%20drought%20degree-1.png" width="400" height="400" /></p>
 <p>In observance of the visualization of drought distribution in October 31 over the years, most of counties were abnormally dry. Four counties in northern Texas (Cottle, Foard, King and Knox), several counties in eastern Texas, and some counties in southern Texas were in moderate dry situation. Jim Hogg county is stil currently suffering from drought. Specific values can be observed by mouse over the relevant cell in the interactive map.</p>
 <pre class="r"><code># Use leaflet to visualize the drought distribution of each county 
-leaflet(shp@bbox) %&gt;%
+leaflet() %&gt;%
   addTiles()%&gt;%
     addPolygons(data=shp_loglat,
                 weight = 1,
@@ -507,10 +507,11 @@ leaflet(shp@bbox) %&gt;%
   addMiniMap()%&gt;%
     addLayersControl(
     baseGroups = c(&quot;D0&quot;, &quot;D1&quot;, &quot;D2&quot;),
-    options = layersControlOptions(collapsed = FALSE))%&gt;%
+    options = layersControlOptions(collapsed = FALSE)
+    )%&gt;%
   frameWidget(height = 500)</code></pre>
-<div id="htmlwidget-b835cac0438b597a64ee" style="width:100%;height:500px;" class="widgetframe html-widget"></div>
-<script type="application/json" data-for="htmlwidget-b835cac0438b597a64ee">{"x":{"url":"Index_files/figure-html//widgets/widget_interactive map.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-217bda3e2cba8c5cadf0" style="width:100%;height:500px;" class="widgetframe html-widget"></div>
+<script type="application/json" data-for="htmlwidget-217bda3e2cba8c5cadf0">{"x":{"url":"Index_files/figure-html//widgets/widget_interactive map.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div id="analysis-of-causes" class="section level2">

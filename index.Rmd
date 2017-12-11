@@ -199,7 +199,7 @@ In observance of the visualization of drought distribution in October 31 over th
 
 ```{r interactive map,message=FALSE,warning=FALSE}
 # Use leaflet to visualize the drought distribution of each county 
-leaflet(shp@bbox) %>%
+leaflet() %>%
   addTiles()%>%
     addPolygons(data=shp_loglat,
                 weight = 1,
@@ -234,7 +234,8 @@ leaflet(shp@bbox) %>%
   addMiniMap()%>%
     addLayersControl(
     baseGroups = c("D0", "D1", "D2"),
-    options = layersControlOptions(collapsed = FALSE))%>%
+    options = layersControlOptions(collapsed = FALSE)
+    )%>%
   frameWidget(height = 500)
 ```
 
