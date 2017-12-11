@@ -521,11 +521,13 @@ leaflet() %&gt;%
 <h3>Visualization of precipitation and temperature</h3>
 <pre class="r"><code># Use dygraph to chart
 dygraph(data = time,
-        main = &quot;Temperature and precipitation from 2000 to 2017 in Texas&quot;,height = 400
+        main = &quot;Temperature and precipitation from 2000 to 2017 in Texas&quot;,height = 350
         ) %&gt;%
   dyRangeSelector(dateWindow = c(&quot;2000-01-01&quot;, &quot;2017-10-01&quot;))%&gt;%
   dyOptions(stackedGraph = TRUE) %&gt;%
   frameWidget(height =400)</code></pre>
+<pre><code>## Warning in as.POSIXlt.POSIXct(x, tz): unknown timezone &#39;zone/tz/2017c.1.0/
+## zoneinfo/America/New_York&#39;</code></pre>
 <div id="htmlwidget-217bda3e2cba8c5cadf0" style="width:100%;height:400px;" class="widgetframe html-widget"></div>
 <script type="application/json" data-for="htmlwidget-217bda3e2cba8c5cadf0">{"x":{"url":"Index_files/figure-html//widgets/widget_interactive data window.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
 <p>In comparison with temperature changing line, the precipitation’s trend line fluctuates in a volatile manner, suggesting that long term precipitation condition is not stable. Hence, it is likelier to suffer from dry seasons.</p>

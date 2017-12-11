@@ -246,10 +246,10 @@ leaflet() %>%
 
 ### Visualization of precipitation and temperature
 
-```{r interactive data window, echo=TRUE, warning=FALSE}
+```{r interactive data window}
 # Use dygraph to chart
 dygraph(data = time,
-        main = "Temperature and precipitation from 2000 to 2017 in Texas",height = 400
+        main = "Temperature and precipitation from 2000 to 2017 in Texas",height = 350
         ) %>%
   dyRangeSelector(dateWindow = c("2000-01-01", "2017-10-01"))%>%
   dyOptions(stackedGraph = TRUE) %>%
