@@ -84,7 +84,7 @@ Drought index for each county by state for a single day of October 31 was chosen
 Downloaded from [US Climate Division](Datasethttps://www.esrl.noaa.gov/psd/cgi-bin/data/timeseries/timeseries1.pl), including temperature, precipitation and Palmer Drought Severity Index(PDSI) from 2000 to October 2017. PDSI is a standardized index that spans -10 (dry) to +10 (wet) which uses available temperature and precipitation data to estimate relative dryness.(PDSI, 2017)
 These data are text, but organized in Excel for the project, and loaded with read.csv function. 
 
-```{r,message=FALSE,results='hide',warning=FALSE}
+```{r,message=FALSE,message=FALSE,warning=FALSE}
 # data2 temp$precip data loading
 min_mean <- read.csv('data/minmean.csv')
 max_mean <- read.csv('data/maxmean.csv')
@@ -199,7 +199,7 @@ grid.arrange(ggplot0,ggplot1,ggplot2,nrow=1)
 
 In observance of the visualization of drought distribution in October 31 over the years, most of counties were abnormally dry. Four counties in northern Texas (Cottle, Foard, King and Knox), several counties in eastern Texas, and some counties in southern Texas were in moderate dry situation. Jim Hogg county is stil currently suffering from drought. Specific values can be observed by mouse over the relevant cell in the interactive map.
 
-```{r interactive map,message=FALSE,warning=FALSE}
+```{r interactive map}
 # Use leaflet to visualize the drought distribution of each county 
 leaflet() %>%
   addTiles()%>%
@@ -246,14 +246,14 @@ leaflet() %>%
 
 ### Visualization of precipitation and temperature
 
-```{r interactive data window,message=FALSE,warning=FALSE}
+```{r interactive data window, message=FALSE, warning=FALSE}
 # Use dygraph to chart
 dygraph(data = time,
         main = "Temperature and precipitation from 2000 to 2017 in Texas",
-        height = 100) %>%
+        height = 450) %>%
   dyRangeSelector(dateWindow = c("2000-01-01", "2017-10-01"))%>%
   dyOptions(stackedGraph = TRUE) %>%
-  frameWidget(height =500)
+  frameWidget(height =450)
 ```
 
 
